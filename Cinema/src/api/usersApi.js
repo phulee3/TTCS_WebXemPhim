@@ -46,6 +46,11 @@ const usersApi = {
         const path = `/QuanLyDatVe/LayDanhSachVeDaMua?taiKhoanNguoiDat=${taiKhoanNguoiDat}`;
         return axiosClient.get(path);
     },
+
+    getDanhSachVeDatCuaKhachHang : () => {
+        const path = `/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang`;
+        return axiosClient.get(path);
+    }
 };
 
 export default usersApi;

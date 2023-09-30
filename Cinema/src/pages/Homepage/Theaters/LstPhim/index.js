@@ -10,23 +10,35 @@ import LstNgayChieu from './LstNgayChieu/'
 function Index(props) {
   const history = useHistory();
   const classes = useStyles({ customScrollbar, underLine });
+  console.log("PHIM", props.lstPhim);
+
+  const convertToBase64 = (uint8Array) => {
+    let binary = '';
+    const length = uint8Array.byteLength;
+    for (let i = 0; i < length; i++) {
+      binary += String.fromCharCode(uint8Array[i]);
+    }
+    return btoa(binary);
+  };
+
   return (
-    <div className={classes.lstPhim} hidden={props.hidden}>{/* div root danh sách phim */}
+    <div className={classes.lstPhim} hidden={props.hidden}>
       {props.lstPhim.map(phim => (
         <div onClick={() => history.push(`/detail/${phim.maPhim}`)} className={classes.phim} key={phim.maPhim}>
-          <div className={classes.phim__info}>{/* div thong tin phim */}
-            <img src={phim.hinhAnh} className={classes.phim__img} alt={phim.tenPhim} />
+          <div className={classes.phim__info}>
+            <img src="https://us.123rf.com/450wm/anatolir/anatolir2201/anatolir220106989/180624111-vecteur-simple-d-ic%C3%B4ne-de-clapet-vid%C3%A9o-film-de-cin%C3%A9ma.jpg?ver=6" className={classes.phim__img} alt={phim.tenPhim} />
             <div className={classes.phim__text}>
               <p className={classes.phim__text_name}>{phim.tenPhim}</p>
-              <ThoiLuongDanhGia maPhim={phim.maPhim} />{/* phải tách riêng ra vì thời lượng và đánh giá lấy từ một api khác */}
+              <ThoiLuongDanhGia maPhim={phim.maPhim} />
             </div>
           </div>
-          <div>{/* div danh sách ngày giờ chiếu */}
+          <div>
             <LstNgayChieu lstLichChieuTheoPhim={phim.lstLichChieuTheoPhim} />
           </div>
         </div>
       ))}
     </div>
-  )
+  );
 }
-export default memo(Index)
+
+export default memo(Index);

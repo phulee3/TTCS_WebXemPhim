@@ -400,6 +400,34 @@ app.get('/api/QuanLyPhim/LayThongTinPhim', function (req, res) {
 });
 
 // QuanLyDatVe
+
+app.get('/api/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang', function (req, res) {
+    dbConn.query('SELECT * FROM lichchieuinsert JOIN phiminsertvalichchieuinsert ON lichchieuinsert.maLichChieu = phiminsertvalichchieuinsert.lichchieuinsert JOIN phiminsert ON phiminsert.maPhim = phiminsertvalichchieuinsert.phiminsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN datve ON datve.maLichChieu = lichchieuinsert.maLichChieu ORDER BY ngayChieuGioChieu DESC', async (error, results, fields) => {
+        if (error) throw error;
+
+        var danhSachVe = [];
+        for (var i = 0; i < results.length; i++) {
+            danhSachVe.push({
+                "maLichChieu": results[i].maLichChieu,
+                "tenCumRap": results[i].tenCumRap,
+                "tenRap": results[i].tenRap,
+                "diaChi": results[i].diaChi,
+                "tenPhim": results[i].tenPhim,
+                "hinhAnh": results[i].hinhAnh,
+                "ngayChieu": results[i].ngayChieuGioChieu,
+                "gioChieu": results[i].ngayChieuGioChieu,
+                "tenGhe": results[i].tenGhe,
+                "tenDayDu": results[i].tenDayDu,
+                "loaiGhe": results[i].loaiGhe,
+                "giaVe": results[i].giaVe,
+                "tenTaiKhoan" : results[i].taiKhoanNguoiDat
+            });
+        }
+        return res.send(danhSachVe);
+    });
+});
+
+
 app.get('/api/QuanLyDatVe/LayDanhSachVeDaMua', function (req, res) {
     dbConn.query('SELECT * FROM lichchieuinsert JOIN phiminsertvalichchieuinsert ON lichchieuinsert.maLichChieu = phiminsertvalichchieuinsert.lichchieuinsert JOIN phiminsert ON phiminsert.maPhim = phiminsertvalichchieuinsert.phiminsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN datve ON datve.maLichChieu = lichchieuinsert.maLichChieu WHERE datve.taiKhoanNguoiDat = ? ORDER BY ngayChieuGioChieu DESC', [req.query.taiKhoanNguoiDat], async (error, results, fields) => {
         if (error) throw error;

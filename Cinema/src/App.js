@@ -18,6 +18,7 @@ import BookTicket from "./pages/BookTicket";
 import UsersManagement from "./pages/UsersManagement";
 import MoviesManagement from "./pages/MoviesManagement";
 import CreateShowtime from "./pages/CreateShowtime";
+import TicketManagemnt from "./pages/TicketManagement";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Page404 from "./pages/Page404";
@@ -69,7 +70,7 @@ function App() {
                             <AdminRoute
                                 exact
                                 path="/admin/ticket-management"
-                                component={CreateShowtime}
+                                component={TicketManagemnt}
                             />
                             <AdminRoute
                                 exact
