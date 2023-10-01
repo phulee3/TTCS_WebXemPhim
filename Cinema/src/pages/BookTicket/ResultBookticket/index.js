@@ -1,15 +1,40 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useSelector } from 'react-redux'
 
 import useStyles from './style'
 import { colorTheater } from '../../../constants/theaterData'
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
 
 export default function ResultBookTicket() {
+    const location = useLocation();
     const { isMobile, amount, email, phone, paymentMethod, listSeatSelected, successBookTicketTicketMessage, errorBookTicketMessage, danhSachPhongVe: { thongTinPhim } } = useSelector((state) => state.BookTicketReducer)
     const { currentUser } = useSelector((state) => state.authReducer)
     const classes = useStyles({ thongTinPhim, color: colorTheater[thongTinPhim?.tenCumRap.slice(0, 3).toUpperCase()], isMobile })
+    const [ghe, setGhe] = useState([]);
+    const [total, setTotal] = useState();
 
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const transactionStatus = searchParams.get('vnp_TransactionStatus');
+        const total = searchParams.get('vnp_Amount');
+        setTotal(total/100);
+        console.log("STATUS", transactionStatus);
+
+        // The vnp_TransactionStatus parameter is set
+        console.log('Transaction Status:', transactionStatus);
+
+        const danhSachVe = [];
+        searchParams.forEach((value, key) => {
+            if (key.startsWith('danhSachVe')) {
+                const index = key.match(/\[(\d+)\]/)[1];
+                danhSachVe[index] = JSON.parse(value);
+            }
+        });
+
+        const extractedGhe = danhSachVe.map(ve => ve.tenDayDu);
+        setGhe(extractedGhe);
+    }, [location.search]);
     return (
         <div className={classes.resultBookTicket}>
             <div className={classes.infoTicked} >
@@ -33,7 +58,7 @@ export default function ResultBookTicket() {
                             </tr>
                             <tr>
                                 <td valign='top'>Ghế:</td>
-                                <td>{listSeatSelected?.join(", ")}</td>
+                                <td>{ghe.join(', ')}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -65,7 +90,7 @@ export default function ResultBookTicket() {
                             </tr>
                             <tr>
                                 <td valign='top' >Tổng tiền:</td>
-                                <td valign='top'><span>{`${amount.toLocaleString('vi-VI')} đ`}</span></td>
+                                <td valign='top'><span>{`${total?.toLocaleString('vi-VI')} đ`}</span></td>
                             </tr>
                         </tbody>
                     </table>
