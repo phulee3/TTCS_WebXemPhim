@@ -103,8 +103,8 @@ app.get('/api/create_payment_url', function (req, res, next) {
 
     console.log('Amount:', amount);
     console.log('Ma Lich Chieu:', maLichChieu);
-    console.log('Tai Khoan: ', taiKhoanNguoiDung)
-    console.log('Danh sach ve: ', JSON.stringify(danhSachVe))
+    console.log('Tai Khoan: ', JSON.stringify(taiKhoanNguoiDung))
+    console.log('Danh sach ve: ', danhSachVe)
 
     vnp_Params = sortObject(vnp_Params);
 

@@ -142,25 +142,22 @@ export default function PayMent() {
     }, [listSeat]);
 
     useEffect(() => {
-        const searchParams = new URLSearchParams(location2.search);
+        const searchParams = new URLSearchParams(location.search);
         const transactionStatus = searchParams.get('vnp_TransactionStatus');
+        console.log("STATUS", transactionStatus);
     
-        if (transactionStatus) {
-          // The vnp_TransactionStatus parameter is set
-          console.log('Transaction Status:', transactionStatus);
+        // The vnp_TransactionStatus parameter is set
+        console.log('Transaction Status:', transactionStatus);
     
-          // Call additional functions or perform actions based on the transaction status
-          if (
-            // isReadyPayment &&
-            !loadingBookTicketTicket &&
-            !successBookTicketTicketMessage &&
-            !errorBookTicketMessage
-        ) {
-         dispatch(BookTicket({ maLichChieu, danhSachVe, taiKhoanNguoiDung }));
-            
+        // Call additional functions or perform actions based on the transaction status
+        if (transactionStatus === "00") {
+          console.log("STATUS 2", transactionStatus);
+          // const maLichChieu = searchParams.get('maLichChieu'); // Retrieve the required parameters from the query string
+          // const danhSachVe = searchParams.get('danhSachVe');
+          // const taiKhoanNguoiDung = searchParams.get('taiKhoanNguoiDung');
+          dispatch(BookTicket({ maLichChieu, danhSachVe, taiKhoanNguoiDung }));
         }
-        }
-      }, [location2.search]);
+      }, [location.search, dispatch]);
 
     const handleBookTicket = () => {
         usersApi.creatPaymentUrl(amount, maLichChieu, maLichChieu, danhSachVe, taiKhoanNguoiDung).then(
