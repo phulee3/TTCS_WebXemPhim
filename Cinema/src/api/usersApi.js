@@ -51,8 +51,8 @@ const usersApi = {
         const path = `/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang`;
         return axiosClient.get(path);
     },
-    creatPaymentUrl : (amount, maLichChieu) => {
-        const path = `/create_payment_url?amount=${amount}&maLichChieu=${maLichChieu}`;
+    creatPaymentUrl : (amount, maLichChieu,  danhSachVe, taiKhoanNguoiDung) => {
+        const path = `/create_payment_url?amount=${amount}&maLichChieu=${maLichChieu}&dachSachVe=${danhSachVe}&taiKhoanNguoiDung=${taiKhoanNguoiDung}`;
         return axiosClient.get(path);
     }
 };

@@ -81,7 +81,9 @@ app.get('/api/create_payment_url', function (req, res, next) {
     let returnUrl = config.get('vnp_ReturnUrl');
     let orderId = moment(date).format('DDHHmmss');
     let amount = req.query.amount;
-    let maLichChieu = req.query.maLichChieu;
+    let maLichChieu = req.query.maLichChieu; 
+    let taiKhoanNguoiDung = req.query.taiKhoanNguoiDung;
+    let danhSachVe = req.query.danhSachVe;
 
 
     let currCode = 'VND';
@@ -101,6 +103,8 @@ app.get('/api/create_payment_url', function (req, res, next) {
 
     console.log('Amount:', amount);
     console.log('Ma Lich Chieu:', maLichChieu);
+    console.log('Tai Khoan: ', taiKhoanNguoiDung)
+    console.log('Danh sach ve: ', danhSachVe)
 
     vnp_Params = sortObject(vnp_Params);
 

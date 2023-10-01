@@ -163,7 +163,7 @@ export default function PayMent() {
       }, [location.search]);
 
     const handleBookTicket = () => {
-        usersApi.creatPaymentUrl(amount, maLichChieu).then(
+        usersApi.creatPaymentUrl(amount, maLichChieu, maLichChieu, danhSachVe, taiKhoanNguoiDung).then(
             result => {
                 console.log(result.data)
                 window.location.href = result.data;
