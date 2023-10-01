@@ -40,7 +40,7 @@ const makeObjError = (name, value, dataSubmit) => {
 
 export default function PayMent() {
     const history = useHistory();
-    const location = useLocation();
+    const location2 = useLocation();
     const {
         listSeat,
         amount,
@@ -142,7 +142,7 @@ export default function PayMent() {
     }, [listSeat]);
 
     useEffect(() => {
-        const searchParams = new URLSearchParams(location.search);
+        const searchParams = new URLSearchParams(location2.search);
         const transactionStatus = searchParams.get('vnp_TransactionStatus');
     
         if (transactionStatus) {
@@ -160,7 +160,7 @@ export default function PayMent() {
             
         }
         }
-      }, [location.search]);
+      }, [location2.search]);
 
     const handleBookTicket = () => {
         usersApi.creatPaymentUrl(amount, maLichChieu, maLichChieu, danhSachVe, taiKhoanNguoiDung).then(
