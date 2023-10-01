@@ -9,6 +9,10 @@ const jwt = require('jsonwebtoken');
 const { application } = require('express');
 var nodemailer = require('nodemailer');
 
+let $ = require('jquery');
+const request = require('request');
+const moment = require('moment');
+
 
 
 app.use(cors())
@@ -17,14 +21,19 @@ app.use(bodyParser.urlencoded({ limit: '5000mb' }));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.options('*', function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.sendStatus(204);
+  });
 
 // Set up Global configuration access
 dotenv.config();
 
 // route mặc định
-app.get('/', function (req, res) {
-    return res.send({ error: true, message: 'hello' })
-});
+
+
 // chỉnh port
 app.listen(process.env.PORT || 4000, function () {
     console.log('Node app is running on port 4000');
@@ -51,6 +60,61 @@ const validateToken = (req, res) => {
         return res.status(401).send(error);
     }
 }
+// VNPay
+app.get('/api/create_payment_url', function (req, res, next) {
+
+    process.env.TZ = 'Asia/Ho_Chi_Minh';
+
+    let date = new Date();
+    let createDate = moment(date).format('YYYYMMDDHHmmss');
+
+    let ipAddr = req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+
+    let config = require('config');
+
+    let tmnCode = config.get('vnp_TmnCode');
+    let secretKey = config.get('vnp_HashSecret');
+    let vnpUrl = config.get('vnp_Url');
+    let returnUrl = config.get('vnp_ReturnUrl');
+    let orderId = moment(date).format('DDHHmmss');
+    let amount = req.query.amount;
+    let maLichChieu = req.query.maLichChieu;
+
+
+    let currCode = 'VND';
+    let vnp_Params = {};
+    vnp_Params['vnp_Version'] = '2.1.0';
+    vnp_Params['vnp_Command'] = 'pay';
+    vnp_Params['vnp_TmnCode'] = tmnCode;
+    vnp_Params['vnp_Locale'] = 'vn';
+    vnp_Params['vnp_CurrCode'] = currCode;
+    vnp_Params['vnp_TxnRef'] = orderId;
+    vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
+    vnp_Params['vnp_OrderType'] = 'other';
+    vnp_Params['vnp_Amount'] = amount * 100;
+    vnp_Params['vnp_ReturnUrl'] = returnUrl + maLichChieu;
+    vnp_Params['vnp_IpAddr'] = ipAddr;
+    vnp_Params['vnp_CreateDate'] = createDate;
+
+    console.log('Amount:', amount);
+    console.log('Ma Lich Chieu:', maLichChieu);
+
+    vnp_Params = sortObject(vnp_Params);
+
+    let querystring = require('qs');
+    let signData = querystring.stringify(vnp_Params, { encode: false });
+    let crypto = require("crypto");
+    let hmac = crypto.createHmac("sha512", secretKey);
+    let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
+    vnp_Params['vnp_SecureHash'] = signed;
+    vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+
+    console.log(vnpUrl);
+    res.send(vnpUrl)
+});
 
 // QuanLyRap
 
@@ -420,7 +484,7 @@ app.get('/api/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang', function (req, res) {
                 "tenDayDu": results[i].tenDayDu,
                 "loaiGhe": results[i].loaiGhe,
                 "giaVe": results[i].giaVe,
-                "tenTaiKhoan" : results[i].taiKhoanNguoiDat
+                "tenTaiKhoan": results[i].taiKhoanNguoiDat
             });
         }
         return res.send(danhSachVe);
@@ -506,6 +570,7 @@ app.get('/api/QuanLyDatVe/LayDanhSachPhongVe', function (req, res) {
 });
 
 app.post('/api/QuanLyDatVe/DatVe', async (req, res) => {
+
     var listVe = [];
     var email = "";
     var tenPhim = "";
@@ -513,81 +578,81 @@ app.post('/api/QuanLyDatVe/DatVe', async (req, res) => {
     var tenCumRap = "";
     var time = "";
     for (const ve of req.body.danhSachVe) {
-      listVe.push(ve);
-      await new Promise((resolve, reject) => {
-        dbConn.query("INSERT INTO datve SET ? ", {
-          tenGhe: ve.maGhe,
-          loaiGhe: ve.giaVe > 75000 ? "Vip" : "Thuong",
-          giaVe: ve.giaVe,
-          taiKhoanNguoiDat: req.body.taiKhoanNguoiDung,
-          maLichChieu: req.body.maLichChieu,
-          tenDayDu: ve.tenDayDu,
-        }, function (error, results, fields) {
-          if (error) throw error;
-          resolve();
+        listVe.push(ve);
+        await new Promise((resolve, reject) => {
+            dbConn.query("INSERT INTO datve SET ? ", {
+                tenGhe: ve.maGhe,
+                loaiGhe: ve.giaVe > 75000 ? "Vip" : "Thuong",
+                giaVe: ve.giaVe,
+                taiKhoanNguoiDat: req.body.taiKhoanNguoiDung,
+                maLichChieu: req.body.maLichChieu,
+                tenDayDu: ve.tenDayDu,
+            }, function (error, results, fields) {
+                if (error) throw error;
+                resolve();
+            });
         });
-      });
     }
-  
+
     dbConn.query(
-      "SELECT * FROM nguoidungvm n WHERE n.taiKhoan = ?",
-      [req.body.taiKhoanNguoiDung],
-      function (error, results3, fields) {
-        console.log("QUERY", results3);
-        if (error) throw error;
-        for (const result1 of results3) {
-          email = result1.email;
-  
-          dbConn.query(
-            "SELECT * FROM lichchieuinsert JOIN phiminsertvalichchieuinsert ON lichchieuinsert.maLichChieu = phiminsertvalichchieuinsert.lichchieuinsert JOIN phiminsert ON phiminsert.maPhim = phiminsertvalichchieuinsert.phiminsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN datve ON datve.maLichChieu = lichchieuinsert.maLichChieu WHERE datve.taiKhoanNguoiDat = ? AND lichchieuinsert.maLichChieu = ? LIMIT 1",
-            [req.body.taiKhoanNguoiDung, req.body.maLichChieu],
-            function (error, results2, fields) {
-              console.log("QUERY", results2);
-              if (error) throw error;
-              for (const result2 of results2) {
-                tenCumRap = result2.tenCumRap;
-                tenRap = result2.tenRap;
-                tenPhim = result2.tenPhim;
-                time = result2.ngayChieuGioChieu;
-  
-                console.log("LOG DAT VE", email, req.body.maLichChieu, listVe, tenRap, tenCumRap, tenPhim, time);
-  
-                var transporter = nodemailer.createTransport({
-                  service: "gmail",
-                  auth: {
-                    user: "khanhhn.hoang@gmail.com",
-                    pass: "rmjgjdgtziwhvmai",
-                  },
-                });
-  
-                var mailOptions = {
-                    from: "admin@gmail.com",
-                    to: email,
-                    subject: "Bạn đặt vé thành công",
-                    text: "Các thông tin về vé đặt:\n" +
-                      "Mã Ghế: " + listVe.map(ve => ve.maGhe).join(", ") + "\n" +
-                      "Tên Rạp: " + tenRap + "\n" +
-                      "Tên Cụm Rạp: " + tenCumRap + "\n" +
-                      "Tên Phim: " + tenPhim + "\n" +
-                      "Thời gian chiếu: " + time,
-                  };
-  
-                transporter.sendMail(mailOptions, function (error, info) {
-                  if (error) {
-                    console.log(error);
-                  } else {
-                    console.log("Email sent: " + info.response);
-                  }
-                });
-              }
+        "SELECT * FROM nguoidungvm n WHERE n.taiKhoan = ?",
+        [req.body.taiKhoanNguoiDung],
+        function (error, results3, fields) {
+            console.log("QUERY", results3);
+            if (error) throw error;
+            for (const result1 of results3) {
+                email = result1.email;
+
+                dbConn.query(
+                    "SELECT * FROM lichchieuinsert JOIN phiminsertvalichchieuinsert ON lichchieuinsert.maLichChieu = phiminsertvalichchieuinsert.lichchieuinsert JOIN phiminsert ON phiminsert.maPhim = phiminsertvalichchieuinsert.phiminsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN datve ON datve.maLichChieu = lichchieuinsert.maLichChieu WHERE datve.taiKhoanNguoiDat = ? AND lichchieuinsert.maLichChieu = ? LIMIT 1",
+                    [req.body.taiKhoanNguoiDung, req.body.maLichChieu],
+                    function (error, results2, fields) {
+                        console.log("QUERY", results2);
+                        if (error) throw error;
+                        for (const result2 of results2) {
+                            tenCumRap = result2.tenCumRap;
+                            tenRap = result2.tenRap;
+                            tenPhim = result2.tenPhim;
+                            time = result2.ngayChieuGioChieu;
+
+                            console.log("LOG DAT VE", email, req.body.maLichChieu, listVe, tenRap, tenCumRap, tenPhim, time);
+
+                            var transporter = nodemailer.createTransport({
+                                service: "gmail",
+                                auth: {
+                                    user: "khanhhn.hoang@gmail.com",
+                                    pass: "rmjgjdgtziwhvmai",
+                                },
+                            });
+
+                            var mailOptions = {
+                                from: "admin@gmail.com",
+                                to: email,
+                                subject: "Bạn đặt vé thành công",
+                                text: "Các thông tin về vé đặt:\n" +
+                                    "Mã Ghế: " + listVe.map(ve => ve.maGhe).join(", ") + "\n" +
+                                    "Tên Rạp: " + tenRap + "\n" +
+                                    "Tên Cụm Rạp: " + tenCumRap + "\n" +
+                                    "Tên Phim: " + tenPhim + "\n" +
+                                    "Thời gian chiếu: " + time,
+                            };
+
+                            transporter.sendMail(mailOptions, function (error, info) {
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    console.log("Email sent: " + info.response);
+                                }
+                            });
+                        }
+                    }
+                );
             }
-          );
         }
-      }
     );
-  
+
     return res.send("Success");
-  });
+});
 
 app.post('/api/QuanLyDatVe/TaoLichChieu', async (req, res) => {
     dbConn.query("INSERT INTO lichchieuinsert SET ? ", {
@@ -683,3 +748,19 @@ app.delete('/api/QuanLyPhim/XoaPhim', function (req, res) {
     });
 });
 
+
+function sortObject(obj) {
+    let sorted = {};
+    let str = [];
+    let key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            str.push(encodeURIComponent(key));
+        }
+    }
+    str.sort();
+    for (key = 0; key < str.length; key++) {
+        sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
+    }
+    return sorted;
+}

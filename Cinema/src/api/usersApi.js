@@ -50,6 +50,10 @@ const usersApi = {
     getDanhSachVeDatCuaKhachHang : () => {
         const path = `/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang`;
         return axiosClient.get(path);
+    },
+    creatPaymentUrl : (amount, maLichChieu) => {
+        const path = `/create_payment_url?amount=${amount}&maLichChieu=${maLichChieu}`;
+        return axiosClient.get(path);
     }
 };
 

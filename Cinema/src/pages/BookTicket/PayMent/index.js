@@ -9,6 +9,9 @@ import {
     SET_DATA_PAYMENT,
     SET_READY_PAYMENT,
 } from "../../../reducers/constants/BookTicket";
+import usersApi from "../../../api/usersApi";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useLocation } from 'react-router-dom';
 
 
 const makeObjError = (name, value, dataSubmit) => {
@@ -36,6 +39,8 @@ const makeObjError = (name, value, dataSubmit) => {
 };
 
 export default function PayMent() {
+    const history = useHistory();
+    const location = useLocation();
     const {
         listSeat,
         amount,
@@ -136,15 +141,34 @@ export default function PayMent() {
         }));
     }, [listSeat]);
 
-    const handleBookTicket = () => {
-        if (
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const transactionStatus = searchParams.get('vnp_TransactionStatus');
+    
+        if (transactionStatus) {
+          // The vnp_TransactionStatus parameter is set
+          console.log('Transaction Status:', transactionStatus);
+    
+          // Call additional functions or perform actions based on the transaction status
+          if (
             // isReadyPayment &&
             !loadingBookTicketTicket &&
             !successBookTicketTicketMessage &&
             !errorBookTicketMessage
         ) {
-            dispatch(BookTicket({ maLichChieu, danhSachVe, taiKhoanNguoiDung }));
+         dispatch(BookTicket({ maLichChieu, danhSachVe, taiKhoanNguoiDung }));
+            
         }
+        }
+      }, [location.search]);
+
+    const handleBookTicket = () => {
+        usersApi.creatPaymentUrl(amount, maLichChieu).then(
+            result => {
+                console.log(result.data)
+                window.location.href = result.data;
+            }
+        ).catch();
     };
     const onFocus = (e) => {
         setDataFocus({ ...dataFocus, [e.target.name]: true });
