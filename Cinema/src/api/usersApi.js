@@ -51,10 +51,20 @@ const usersApi = {
         const path = `/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang`;
         return axiosClient.get(path);
     },
-    creatPaymentUrl : (amount, maLichChieu,  danhSachVe, taiKhoanNguoiDung) => {
-        const path = `/create_payment_url?amount=${amount}&maLichChieu=${maLichChieu}&dachSachVe=${danhSachVe}&taiKhoanNguoiDung=${taiKhoanNguoiDung}`;
-        return axiosClient.get(path);
-    }
+    creatPaymentUrl: (amount, maLichChieu, danhSachVe, taiKhoanNguoiDung) => {
+        const path = '/create_payment_url';
+        const params = {
+          amount: amount,
+          maLichChieu: maLichChieu,
+          taiKhoanNguoiDung: taiKhoanNguoiDung
+        };
+      
+        danhSachVe.forEach((value, index) => {
+          params[`danhSachVe[${index}]`] = value;
+        });
+      
+        return axiosClient.get(path, { params });
+      }
 };
 
 export default usersApi;

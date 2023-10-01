@@ -10,7 +10,7 @@ import {
     SET_READY_PAYMENT,
 } from "../../../reducers/constants/BookTicket";
 import usersApi from "../../../api/usersApi";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { useLocation } from 'react-router-dom';
 
 
@@ -40,7 +40,7 @@ const makeObjError = (name, value, dataSubmit) => {
 
 export default function PayMent() {
     const history = useHistory();
-    const location2 = useLocation();
+    const location = useLocation();
     const {
         listSeat,
         amount,
@@ -145,22 +145,33 @@ export default function PayMent() {
         const searchParams = new URLSearchParams(location.search);
         const transactionStatus = searchParams.get('vnp_TransactionStatus');
         console.log("STATUS", transactionStatus);
-    
+
         // The vnp_TransactionStatus parameter is set
         console.log('Transaction Status:', transactionStatus);
-    
+
+        const danhSachVe = [];
+        searchParams.forEach((value, key) => {
+            if (key.startsWith('danhSachVe')) {
+                const index = key.match(/\[(\d+)\]/)[1];
+                danhSachVe[index] = JSON.parse(value);
+            }
+        });
+
         // Call additional functions or perform actions based on the transaction status
-        if (transactionStatus === "00") {
-          console.log("STATUS 2", transactionStatus);
-          // const maLichChieu = searchParams.get('maLichChieu'); // Retrieve the required parameters from the query string
-          // const danhSachVe = searchParams.get('danhSachVe');
-          // const taiKhoanNguoiDung = searchParams.get('taiKhoanNguoiDung');
-          dispatch(BookTicket({ maLichChieu, danhSachVe, taiKhoanNguoiDung }));
+        if (transactionStatus) {
+            console.log("STATUS 2", transactionStatus);
+            const taiKhoanNguoiDung = searchParams.get('taiKhoanNguoiDung');
+            const maLichChieu = searchParams.get('maLichChieu');
+            console.log('Ma Lich Chieu:', maLichChieu);
+            console.log('Tai Khoan: ', taiKhoanNguoiDung)
+            console.log('Danh sach ve: ', danhSachVe)
+            dispatch(BookTicket({ maLichChieu, danhSachVe, taiKhoanNguoiDung }));
         }
-      }, [location.search, dispatch]);
+    }, [location.search, dispatch]);
 
     const handleBookTicket = () => {
-        usersApi.creatPaymentUrl(amount, maLichChieu, maLichChieu, danhSachVe, taiKhoanNguoiDung).then(
+        console.log("Danh Sach Ve", danhSachVe)
+        usersApi.creatPaymentUrl(amount, maLichChieu, danhSachVe, taiKhoanNguoiDung).then(
             result => {
                 console.log(result.data)
                 window.location.href = result.data;

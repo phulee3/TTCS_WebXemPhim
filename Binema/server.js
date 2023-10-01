@@ -74,17 +74,20 @@ app.get('/api/create_payment_url', function (req, res, next) {
         req.connection.socket.remoteAddress;
 
     let config = require('config');
-
+    const { amount, maLichChieu, danhSachVe, taiKhoanNguoiDung } = req.query;
     let tmnCode = config.get('vnp_TmnCode');
     let secretKey = config.get('vnp_HashSecret');
     let vnpUrl = config.get('vnp_Url');
     let returnUrl = config.get('vnp_ReturnUrl');
     let orderId = moment(date).format('DDHHmmss');
-    let amount = req.query.amount;
-    let maLichChieu = req.query.maLichChieu; 
-    let taiKhoanNguoiDung = req.query.taiKhoanNguoiDung;
-    let danhSachVe = req.query.danhSachVe;
+    
 
+    let querystring = require('qs');
+    let returnUrlParams = querystring.stringify({
+        danhSachVe,
+        taiKhoanNguoiDung,
+        maLichChieu
+      }, { encode: false });
 
     let currCode = 'VND';
     let vnp_Params = {};
@@ -97,18 +100,18 @@ app.get('/api/create_payment_url', function (req, res, next) {
     vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
     vnp_Params['vnp_OrderType'] = 'other';
     vnp_Params['vnp_Amount'] = amount * 100;
-    vnp_Params['vnp_ReturnUrl'] = returnUrl + maLichChieu;
+    vnp_Params['vnp_ReturnUrl'] = returnUrl + maLichChieu +'?' + returnUrlParams;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
 
     console.log('Amount:', amount);
     console.log('Ma Lich Chieu:', maLichChieu);
-    console.log('Tai Khoan: ', JSON.stringify(taiKhoanNguoiDung))
+    console.log('Tai Khoan: ', taiKhoanNguoiDung)
     console.log('Danh sach ve: ', danhSachVe)
 
     vnp_Params = sortObject(vnp_Params);
 
-    let querystring = require('qs');
+    
     let signData = querystring.stringify(vnp_Params, { encode: false });
     let crypto = require("crypto");
     let hmac = crypto.createHmac("sha512", secretKey);
