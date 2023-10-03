@@ -26,7 +26,7 @@ function Index(props) {
       {props.lstPhim.map(phim => (
         <div onClick={() => history.push(`/detail/${phim.maPhim}`)} className={classes.phim} key={phim.maPhim}>
           <div className={classes.phim__info}>
-            <img src="https://us.123rf.com/450wm/anatolir/anatolir2201/anatolir220106989/180624111-vecteur-simple-d-ic%C3%B4ne-de-clapet-vid%C3%A9o-film-de-cin%C3%A9ma.jpg?ver=6" className={classes.phim__img} alt={phim.tenPhim} />
+            <img src={phim.hinhAnh} className={classes.phim__img} alt={phim.tenPhim} />
             <div className={classes.phim__text}>
               <p className={classes.phim__text_name}>{phim.tenPhim}</p>
               <ThoiLuongDanhGia maPhim={phim.maPhim} />

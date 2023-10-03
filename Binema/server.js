@@ -21,12 +21,12 @@ app.use(bodyParser.urlencoded({ limit: '5000mb' }));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.options('*', function(req, res, next) {
+app.options('*', function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.sendStatus(204);
-  });
+});
 
 // Set up Global configuration access
 dotenv.config();
@@ -80,14 +80,14 @@ app.get('/api/create_payment_url', function (req, res, next) {
     let vnpUrl = config.get('vnp_Url');
     let returnUrl = config.get('vnp_ReturnUrl');
     let orderId = moment(date).format('DDHHmmss');
-    
+
 
     let querystring = require('qs');
     let returnUrlParams = querystring.stringify({
         danhSachVe,
         taiKhoanNguoiDung,
         maLichChieu
-      }, { encode: false });
+    }, { encode: false });
 
     let currCode = 'VND';
     let vnp_Params = {};
@@ -100,7 +100,7 @@ app.get('/api/create_payment_url', function (req, res, next) {
     vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId;
     vnp_Params['vnp_OrderType'] = 'other';
     vnp_Params['vnp_Amount'] = amount * 100;
-    vnp_Params['vnp_ReturnUrl'] = returnUrl + maLichChieu +'?' + returnUrlParams;
+    vnp_Params['vnp_ReturnUrl'] = returnUrl + maLichChieu + '?' + returnUrlParams;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
 
@@ -111,7 +111,7 @@ app.get('/api/create_payment_url', function (req, res, next) {
 
     vnp_Params = sortObject(vnp_Params);
 
-    
+
     let signData = querystring.stringify(vnp_Params, { encode: false });
     let crypto = require("crypto");
     let hmac = crypto.createHmac("sha512", secretKey);
@@ -290,9 +290,10 @@ app.get('/api/QuanLyRap/LayThongTinLichChieuHeThongRap', function (req, res) {
                                         "lstLichChieuTheoPhim": lstLichChieuTheoPhim,
                                         "maPhim": result1.maPhim,
                                         "tenPhim": result1.tenPhim,
-                                        "hinhAnh": result1.hinhAnh
+                                        "hinhAnh": result1.hinhAnh.toString()
 
                                     }
+                                    console.log("PHIM", phim)
                                     danhSachPhim.push(phim)
                                 }
                                 resolve(danhSachPhim);
@@ -389,7 +390,7 @@ app.get('/api/QuanLyRap/LayThongTinLichChieuPhim', function (req, res) {
             "tenPhim": results0[0].tenPhim,
             "biDanh": results0[0].biDanh,
             "trailer": results0[0].trailer,
-            "hinhAnh": results0[0].hinhAnh,
+            "hinhAnh": results0[0].hinhAnh.toString(),
             "moTa": results0[0].moTa,
             "maNhom": "GP09",
             "ngayKhoiChieu": results0[0].ngayKhoiChieu,
@@ -472,11 +473,22 @@ app.get('/api/QuanLyPhim/LayThongTinPhim', function (req, res) {
 
 // QuanLyDatVe
 
+app.put('/api/QuanLyDatVe/ThayDoiTrangThaiDatVe', function (req, res) {
+    console.log("RUN", req.body.maGhe, req.body.taiKhoanNguoiDat);
+    dbConn.query('update nodejsapi.datve set isConfirm = 1 where maGhe = ? and taiKhoanNguoiDat = ?',
+        [req.body.maGhe, req.body.taiKhoanNguoiDat], function (error, results, fields) {
+            if (error) throw error;
+            return res.send("Success")
+        })
+})
+
+
 app.get('/api/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang', function (req, res) {
     dbConn.query('SELECT * FROM lichchieuinsert JOIN phiminsertvalichchieuinsert ON lichchieuinsert.maLichChieu = phiminsertvalichchieuinsert.lichchieuinsert JOIN phiminsert ON phiminsert.maPhim = phiminsertvalichchieuinsert.phiminsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN datve ON datve.maLichChieu = lichchieuinsert.maLichChieu ORDER BY ngayChieuGioChieu DESC', async (error, results, fields) => {
         if (error) throw error;
 
         var danhSachVe = [];
+
         for (var i = 0; i < results.length; i++) {
             danhSachVe.push({
                 "maLichChieu": results[i].maLichChieu,
@@ -487,12 +499,16 @@ app.get('/api/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang', function (req, res) {
                 "hinhAnh": results[i].hinhAnh,
                 "ngayChieu": results[i].ngayChieuGioChieu,
                 "gioChieu": results[i].ngayChieuGioChieu,
+                "maGhe": results[i].maGhe,
                 "tenGhe": results[i].tenGhe,
                 "tenDayDu": results[i].tenDayDu,
                 "loaiGhe": results[i].loaiGhe,
                 "giaVe": results[i].giaVe,
-                "tenTaiKhoan": results[i].taiKhoanNguoiDat
+                "tenTaiKhoan": results[i].taiKhoanNguoiDat,
+                "loaiGhe": results[i].giaVe > 75000 ? "Vip" : "Thường",
+                "isConfirm": results[i].isConfirm.readInt8() === 1
             });
+            console.log(danhSachVe)
         }
         return res.send(danhSachVe);
     });
@@ -518,7 +534,9 @@ app.get('/api/QuanLyDatVe/LayDanhSachVeDaMua', function (req, res) {
                 "tenDayDu": results[i].tenDayDu,
                 "loaiGhe": results[i].loaiGhe,
                 "giaVe": results[i].giaVe,
+                "status": results[i].isConfirm?.readInt8() === 1
             });
+            console.log("Status Ticket:", results[i].isConfirm.readInt8() === 1)
         }
         return res.send(danhSachVe);
     });
@@ -594,6 +612,7 @@ app.post('/api/QuanLyDatVe/DatVe', async (req, res) => {
                 taiKhoanNguoiDat: req.body.taiKhoanNguoiDung,
                 maLichChieu: req.body.maLichChieu,
                 tenDayDu: ve.tenDayDu,
+                isConfirm: 0,
             }, function (error, results, fields) {
                 if (error) throw error;
                 resolve();
@@ -637,7 +656,7 @@ app.post('/api/QuanLyDatVe/DatVe', async (req, res) => {
                                 to: email,
                                 subject: "Bạn đặt vé thành công",
                                 text: "Các thông tin về vé đặt:\n" +
-                                    "Mã Ghế: " + listVe.map(ve => ve.maGhe).join(", ") + "\n" +
+                                    "Mã Ghế: " + listVe.map(ve => ve.tenDayDu).join(", ") + "\n" +
                                     "Tên Rạp: " + tenRap + "\n" +
                                     "Tên Cụm Rạp: " + tenCumRap + "\n" +
                                     "Tên Phim: " + tenPhim + "\n" +

@@ -12,7 +12,7 @@ export default function MoviesManagement() {
 
   useEffect(() => {
     usersApi.getDanhSachVeDatCuaKhachHang()
-    .then((result) => {
+      .then((result) => {
         console.log("RESULT", result);
         const rows = result.data.map((item, index) => ({
           ...item,
@@ -26,6 +26,30 @@ export default function MoviesManagement() {
       });
   }, []);
 
+  const handleButtonClick = (params) => {
+    const tenTaiKhoan = params.row.tenTaiKhoan;
+    const maGhe = params.row.maGhe;
+    const id = params.row.id;
+
+    // Sử dụng giá trị tenTaiKhoan, maGhe và id trong API
+    usersApi.updateStatusOfTicket({ maGhe: maGhe, taiKhoanNguoiDat: tenTaiKhoan, id: id })
+      .then(() => {
+        // Cập nhật trạng thái của hàng trong DataGrid thành đã xử lý
+        const updatedRows = datVeDaDat.map((row) => {
+          if (row.id === id) {
+            return { ...row, isConfirm: true };
+          }
+          return row;
+        });
+
+        // Cập nhật dữ liệu trong DataGrid
+        setDatVeDaDat(updatedRows);
+      })
+      .catch((error) => {
+        // Xử lý lỗi
+      });
+  };
+
   const columns = [
     {
       field: "maLichChieu",
@@ -34,14 +58,20 @@ export default function MoviesManagement() {
       width: 130,
     },
     {
-        field: "tenTaiKhoan",
-        headerName: "Tài khoản đặt vé",
-        width: 200,
-        type: "dateTime",
-        headerAlign: "center",
-        align: "center",
-        headerClassName: "custom-header",
-      },
+      field: "maGhe",
+      headerName: "Mã Ghế",
+      hide: true,
+      width: 130,
+    },
+    {
+      field: "tenTaiKhoan",
+      headerName: "Tài khoản đặt vé",
+      width: 200,
+      type: "dateTime",
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "custom-header",
+    },
     {
       field: "tenPhim",
       headerName: "Tên Phim",
@@ -93,10 +123,10 @@ export default function MoviesManagement() {
       headerClassName: "custom-header",
     },
     {
-      field: "tenGhe",
+      field: "loaiGhe",
       headerName: "Loại Ghế",
       width: 200,
-      type: "dateTime",
+      type: "text",
       headerAlign: "center",
       align: "left",
       headerClassName: "custom-header"
@@ -110,6 +140,30 @@ export default function MoviesManagement() {
       align: "center",
       headerClassName: "custom-header",
     },
+    {
+      field: 'isConfirm',
+      headerName: 'Thao tác',
+      width: 130,
+      headerAlign: 'center',
+      align: 'center',
+      sortable: false,
+      renderCell: (params) => {
+        if (params.row.isConfirm === false) {
+          return (
+            <button type="button" className="btn btn-danger" onClick={() => handleButtonClick(params)}>
+              Chưa xử lý
+            </button>
+          );
+        } else {
+          return (
+            <button type="button" className="btn btn-success" disabled>
+              Đã xử lý
+            </button>
+          );
+        }
+      }
+    }
+
   ];
 
   return (

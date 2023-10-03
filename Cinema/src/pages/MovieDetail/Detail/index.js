@@ -38,14 +38,7 @@ export default function Desktop({ movieDetailShowtimes: data, isMobile }) {
     })
   };
 
-  const convertToBase64 = (uint8Array) => {
-    let binary = '';
-    const length = uint8Array.byteLength;
-    for (let i = 0; i < length; i++) {
-      binary += String.fromCharCode.apply(null,uint8Array[i]);
-    }
-    return btoa(binary);
-  };
+
   console.log(data,"data")
   return (
     <div className="">
@@ -53,7 +46,7 @@ export default function Desktop({ movieDetailShowtimes: data, isMobile }) {
         <div className="flexCent">
           <div className="items">
             <img
-              src="https://us.123rf.com/450wm/anatolir/anatolir2201/anatolir220106989/180624111-vecteur-simple-d-ic%C3%B4ne-de-clapet-vid%C3%A9o-film-de-cin%C3%A9ma.jpg?ver=6"
+              src={data.hinhAnh}
               alt="poster"
               onError={(e) => {
                 e.target.onerror = null;

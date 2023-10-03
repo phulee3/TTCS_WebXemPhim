@@ -386,6 +386,7 @@ export default function Index() {
                             <th>Ghế</th>
                             <th>Loại ghế</th>
                             <th>Giá vé</th>
+                            <th style={{ width : "100px"}}>Trạng Thái</th>
                         </thead>
                         <tbody>
                             {dataVeDaDat.map((item) => (
@@ -398,6 +399,7 @@ export default function Index() {
                                     <td>{item.tenDayDu}</td>
                                     <td>{item.loaiGhe}</td>
                                     <td>{item.giaVe}</td>
+                                    <td>{item.status === true ? <><span style={{color : "green"}}>Đã xử lý</span></> : <span style={{color : "red"}}>Đang xử lý</span>}</td>
                                 </tr>
                             ))}
                         </tbody>

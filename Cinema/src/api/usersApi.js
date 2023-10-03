@@ -64,7 +64,11 @@ const usersApi = {
         });
       
         return axiosClient.get(path, { params });
-      }
+      },
+    updateStatusOfTicket : (data) => {
+        const path = `/QuanLyDatVe/ThayDoiTrangThaiDatVe`;
+        return axiosClient.put(path, data)
+    },
 };
 
 export default usersApi;

@@ -195,7 +195,7 @@ export default function PayMent() {
                 <div className={classes.payMentItem}>
                     <p className={classes.tenPhim}>{thongTinPhim?.tenPhim}</p>
                     <p>{thongTinPhim?.tenCumRap}</p>
-                    <p>{`${thongTinPhim && formatDate(thongTinPhim.ngayChieu).dateFull} - ${thongTinPhim?.tenRap}`}</p>
+                    <p>{`${thongTinPhim?.tenRap}`}</p>
                 </div>
 
                 <div className={`${classes.seatInfo} ${classes.payMentItem}`}>
@@ -263,6 +263,13 @@ export default function PayMent() {
                     >
                         Đặt Vé
                     </button>
+                </div>
+                <div className="">
+                    <a href="/">
+                    <button type="button" className={classes.btnDV}>
+                        Quay lại trang chủ →
+                    </button>
+                    </a>
                 </div>
             </div>
         </aside>
