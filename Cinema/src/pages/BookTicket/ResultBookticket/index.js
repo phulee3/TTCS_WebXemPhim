@@ -75,7 +75,7 @@ export default function ResultBookTicket() {
                             </tr>
                             <tr>
                                 <td valign='top'>Điện thoại:</td>
-                                <td valign='top'>{phone}</td>
+                                <td valign='top'>{currentUser?.soDt}</td>
                             </tr>
                             <tr>
                                 <td valign='top'>Email:</td>

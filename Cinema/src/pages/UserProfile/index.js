@@ -102,6 +102,7 @@ export default function Index() {
         (state) => state.usersManagementReducer
     );
     const { currentUser } = useSelector((state) => state.authReducer);
+    console.log("User", currentUser?.soDt )
     const { commentList } = useSelector((state) => state.movieDetailReducer);
     const [dataShort, setdataShort] = useState({
         ticket: 0,

@@ -40,6 +40,8 @@ const makeObjError = (name, value, dataSubmit) => {
 
 export default function PayMent() {
     const history = useHistory();
+    const { currentUser } = useSelector((state) => state.authReducer);
+    console.log('SĐT',currentUser?.soDt)
     const location = useLocation();
     const {
         listSeat,
@@ -61,8 +63,9 @@ export default function PayMent() {
     } = useSelector((state) => state.BookTicketReducer);
     const dispatch = useDispatch();
     const emailRef = useRef();
-    const phoneRef = useRef();
+    const phoneRef = useRef(currentUser?.soDt);
     let variClear = useRef("");
+    console.log("Phone", phone, phoneRef)
     const [dataFocus, setDataFocus] = useState({ phone: false, email: false });
     const [dataSubmit, setdataSubmit] = useState({
         values: {
@@ -185,6 +188,7 @@ export default function PayMent() {
         setDataFocus({ ...dataFocus, [e.target.name]: false });
     };
 
+    console.log("Số điện thoại", dataSubmit)
 
     return (
         <aside className={classes.payMent}>
@@ -224,14 +228,14 @@ export default function PayMent() {
 
                 {/* phone */}
                 <div className={classes.payMentItem}>
-                    <label className={classes.labelPhone}>Phone</label>
+                    <label className={classes.labelPhone}>Phone</label> <br></br>
                     <input
                         type="number"
                         name="phone"
                         ref={phoneRef}
                         onFocus={onFocus}
                         onBlur={onBlur}
-                        value={dataSubmit.values.phone}
+                        value={currentUser?.soDt}
                         className={classes.fillInPhone}
                         onChange={onChange}
                         autoComplete="off"
