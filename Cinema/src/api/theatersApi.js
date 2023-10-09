@@ -17,10 +17,48 @@ const theatersApi = {
         return axiosClient.get(path);
     },
 
+    getListRap: () => {
+        const path = `/QuanLyRap/LayThongTinRap`;
+        return axiosClient.get(path);
+    },
     deleteLichChieu: (maLichChieu) => {
         const path = `/QuanLyLichChieu/XoaLichChieu?maLichChieu=${maLichChieu}`;
         return axiosClient.delete(path);
     },
+    getThongTinCumRap : () => {
+        const path = "/QuanLyRap/LayThongTinCumRap";
+        return axiosClient.get(path);
+    },
+    addThongTinCumRap : (data) => {
+        const path = "/QuanLyRap/AddCumRap";
+        return axiosClient.post(path, data);
+    },
+    suaCumRap : (data) => {
+        const path = "/QuanLyRap/SuaCumRap";
+        return axiosClient.put(path, data)
+    },
+    xoaCumRap : (data) => {
+        const path = "/QuanLyRap/XoaCumRap";
+        return axiosClient.post(path,data);
+    },
+
+    // CHUC NANG CUA RAP
+    themRap : (data) => {
+        const path = "/QuanLyRap/ThemRap";
+        return axiosClient.post(path, data);
+    },
+
+    suaRap : (data) => {
+        const path = "/QuanLyRap/SuaRap";
+        return axiosClient.put(path, data);
+    },
+
+    xoaRap : (data) => {
+        const path = "/QuanLyRap/XoaRap";
+        return axiosClient.post(path, data)
+    }
+
+
 };
 
 export default theatersApi;

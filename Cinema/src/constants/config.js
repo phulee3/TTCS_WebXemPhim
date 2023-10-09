@@ -22,7 +22,7 @@ export const DATE_END_DANGCHIEU = "2020-12-01";
 export const DATE_BEGIN_SAPCHIEU = "2020-12-02";
 export const DATE_END_SAPCHIEU = new Date().toISOString()?.slice(0, 10);
 
-export const arrayGiaVe = [75000, 100000, 120000, 150000];
+export const arrayGiaVe = [35000, 40000, 50000, 75000];
 
 export const theme = createMuiTheme({
     breakpoints: {

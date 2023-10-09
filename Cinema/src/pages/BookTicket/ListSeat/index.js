@@ -13,6 +13,8 @@ import {
 } from "../../../reducers/constants/BookTicket";
 import TenCumRap from "../../../components/TenCumRap";
 import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { format, parse, isValid } from 'date-fns';
+import { vi } from 'date-fns/locale';
 
 export default function ListSeat() {
     const {
@@ -115,6 +117,20 @@ export default function ListSeat() {
         return color;
     };
 
+    const ngayChieu = thongTinPhim?.gioChieu;
+    console.log(ngayChieu)
+    let thu = '';
+    
+    if (ngayChieu) {
+      const parsedDate = parse(ngayChieu, 'dd/MM/yyyy HH:mm:ss', new Date());
+      console.log(parsedDate)
+    
+      if (isValid(parsedDate)) {
+        thu = format(parsedDate, 'EEEE', { locale: vi });
+      }
+    }
+
+
     return (
         <main className={classes.listSeat}>
             <div className={classes.info_CountDown}>
@@ -126,7 +142,7 @@ export default function ListSeat() {
                     />
                     <div className={classes.text}>
                         <TenCumRap tenCumRap={thongTinPhim?.tenCumRap} />
-                        <p className={classes.textTime}>{`${thongTinPhim && formatDate(thongTinPhim.ngayChieu).dayToday
+                        <p className={classes.textTime}>{`${thongTinPhim && thu
                             } - ${thongTinPhim?.gioChieu} - ${thongTinPhim?.tenRap}`}</p>
                     </div>
                 </div>

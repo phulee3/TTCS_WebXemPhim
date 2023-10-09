@@ -3,6 +3,9 @@ import React, { useEffect } from 'react';
 import MovieIcon from '@material-ui/icons/Movie';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import ListAltIcon from '@material-ui/icons/ListAlt';
+import MovieFilterIcon from '@material-ui/icons/MovieFilter';
+import TheatersIcon from '@material-ui/icons/Theaters';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import { useLocation, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -24,9 +27,24 @@ import { FAKE_AVATAR } from '../../../constants/config';
 
 const items = [
   {
+    href: '/admin/dashboard',
+    icon: DashboardIcon,
+    title: 'Dashboard'
+  },
+  {
     href: '/admin/movies',
     icon: MovieIcon,
     title: 'Films'
+  },
+  {
+    href: '/admin/theater-complex',
+    icon: TheatersIcon,
+    title: 'Theater Complex'
+  },
+  {
+    href: '/admin/cinema-management',
+    icon: MovieFilterIcon,
+    title: 'Cinema Management'
   },
   {
     href: '/admin/users',
@@ -42,7 +60,7 @@ const items = [
     href: '/admin/ticket-management',
     icon: ListAltIcon,
     title: 'Ticket Management'
-  },
+  }
 ];
 
 const useStyles = makeStyles(() => ({

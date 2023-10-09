@@ -165,10 +165,12 @@ export default function PayMent() {
             console.log("STATUS 2", transactionStatus);
             const taiKhoanNguoiDung = searchParams.get('taiKhoanNguoiDung');
             const maLichChieu = searchParams.get('maLichChieu');
+            const amount = searchParams.get('vnp_Amount');
+            const tenPhim = thongTinPhim?.tenPhim;
             console.log('Ma Lich Chieu:', maLichChieu);
             console.log('Tai Khoan: ', taiKhoanNguoiDung)
             console.log('Danh sach ve: ', danhSachVe)
-            dispatch(BookTicket({ maLichChieu, danhSachVe, taiKhoanNguoiDung }));
+            dispatch(BookTicket({ maLichChieu, danhSachVe, taiKhoanNguoiDung , amount, tenPhim}));
         }
     }, [location.search, dispatch]);
 

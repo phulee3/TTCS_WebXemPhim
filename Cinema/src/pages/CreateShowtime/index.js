@@ -69,7 +69,7 @@ export default function MoviesManagement() {
         ngayChieuGioChieu: null,
 
         setGiaVe: "",
-        giaVeRender: [75000, 100000, 120000, 150000],
+        giaVeRender: [35000, 40000, 50000, 75000],
 
         startRequest: false,
 

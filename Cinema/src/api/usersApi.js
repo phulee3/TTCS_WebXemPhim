@@ -69,6 +69,16 @@ const usersApi = {
         const path = `/QuanLyDatVe/ThayDoiTrangThaiDatVe`;
         return axiosClient.put(path, data)
     },
+
+    getMonth : () => {
+        const path = "/ThongKe/getMonth";
+        return axiosClient.get(path);
+    },
+
+    getPhim : () => {
+        const path = "ThongKe/getPhim";
+        return axiosClient.get(path);
+    }
 };
 
 export default usersApi;

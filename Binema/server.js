@@ -161,6 +161,12 @@ app.get('/api/QuanLyRap/LayThongTinCumRapTheoHeThong', async (req, res) => {
     });
 });
 
+app.get('/api/QuanLyRap/LayThongTinRap', async (req, res) => {
+    dbConn.query('select * from danhsachrap d join cumrap c on d.maCumRap = c.cid join hethongrapvacumrap h on h.cumrap = c.cid  join hethongrap hr on hr.hid = h.hethongrap ', async (error, results, fields) => {
+        if (error) throw error;
+        return res.send(results);
+    });
+});
 // QuanLyNguoiDung
 
 app.post('/api/QuanLyNguoiDung/DangKy', async (req, res) => {
@@ -195,6 +201,20 @@ app.post('/api/QuanLyNguoiDung/DangNhap', function (req, res) {
 
 app.get('/api/QuanLyNguoiDung/LayDanhSachNguoiDung', function (req, res) {
     dbConn.query('SELECT * FROM nguoidungvm WHERE maNhom=?', [req.query.MaNhom], function (error, results, fields) {
+        if (error) throw error;
+        return res.send(results);
+    });
+});
+
+app.get('/api/ThongKe/getMonth', function (req, res) {
+    dbConn.query('SELECT MONTH(ngayMuaVe) AS thang, YEAR(ngayMuaVe) AS nam, SUM(amount) AS doanhSo FROM nodejsapi.thongke  GROUP BY YEAR(ngayMuaVe), MONTH(ngayMuaVe) ORDER BY nam, thang', [], function (error, results, fields) {
+        if (error) throw error;
+        return res.send(results);
+    });
+});
+
+app.get('/api/ThongKe/getPhim', function (req, res) {
+    dbConn.query('SELECT tenPhim, COUNT(*) AS soLuong from nodejsapi.thongke GROUP BY tenPhim', [], function (error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
@@ -250,6 +270,13 @@ app.delete('/api/QuanLyNguoiDung/XoaNguoiDung', function (req, res) {
 
 app.get('/api/QuanLyRap/LayThongTinHeThongRap', function (req, res) {
     dbConn.query('SELECT * FROM hethongrap', [], function (error, results, fields) {
+        if (error) throw error;
+        return res.send(results);
+    });
+});
+
+app.get('/api/QuanLyRap/LayThongTinCumRap', function (req, res) {
+    dbConn.query('SELECT * FROM cumrap', [], function (error, results, fields) {
         if (error) throw error;
         return res.send(results);
     });
@@ -399,6 +426,80 @@ app.get('/api/QuanLyRap/LayThongTinLichChieuPhim', function (req, res) {
         return res.send(final)
     });
 });
+
+app.post('/api/QuanLyRap/AddCumRap', function (req, res) {
+    dbConn.query("INSERT INTO nodejsapi.cumrap SET ? ", {
+        maCumRap: req.body.maCumRap,
+        tenCumRap: req.body.tenCumRap,
+        diaChi: req.body.diaChi
+    }, function (error, results, fields) {
+        if (error) throw error;
+    });
+    dbConn.query('SELECT * FROM nodejsapi.cumrap where  maCumRap = ?', [req.body.maCumRap], async (error, results0, fields) => {
+        if (error) throw error;
+        for (const result0 of results0) {
+            dbConn.query("INSERT INTO nodejsapi.hethongrapvacumrap (hethongrap, cumrap) VALUES(?, ?)", [req.body.hid ,result0.cid], async (error, results1, fields) => {
+                if (error) throw error;
+            });
+        }
+    }
+    )
+    return res.send("Thêm cụm rạp thành công.")
+})
+
+
+app.put('/api/QuanLyRap/SuaCumRap', function (req, res) {
+    dbConn.query('UPDATE nodejsapi.cumrap SET maCumRap=?, tenCumRap=?, diaChi=? WHERE maCumRap = ?',[req.body.maCumRap, req.body.tenCumRap, req.body.diaChi, req.body.maCumRap], function (error, results, fields) {
+        if (error) throw error;
+    } )
+});
+
+app.post('/api/QuanLyRap/XoaCumRap', function (req, res) {
+    dbConn.query('DELETE FROM nodejsapi.cumrap WHERE maCumRap = ?',[req.body.maCumRap], function (error, results, fields) {
+        if (error) throw error;
+    })
+
+    dbConn.query('SELECT * FROM nodejsapi.cumrap where  maCumRap = ?', [req.body.maCumRap], async (error, results0, fields) => {
+        if (error) throw error;
+        for (const result0 of results0) {
+            dbConn.query("DELETE FROM nodejsapi.hethongrapvacumrap where  maCumRap = ? ", [result0.cid], async (error, results1, fields) => {
+                if (error) throw error;
+            });
+        }
+    }
+    )
+});
+
+// QUAN LY DANH SACH RAP
+
+app.put('/api/QuanLyRap/SuaRap', function (req, res) {
+    dbConn.query('UPDATE nodejsapi.danhsachrap SET tenRap= ? WHERE maRap = ?',[req.body.tenRap, req.body.maRap], function (error, results, fields) {
+        if (error) throw error;
+    } )
+});
+
+app.post('/api/QuanLyRap/XoaRap', function (req, res) {
+    dbConn.query('DELETE FROM nodejsapi.danhsachrap WHERE maRap = ?',[req.body.maRap], function (error, results, fields) {
+        if (error) throw error;
+    })
+});
+
+app.post('/api/QuanLyRap/ThemRap', function (req, res) {
+    dbConn.query('SELECT * FROM nodejsapi.cumrap where  maCumRap = ?', [req.body.maCumRap], async (error, results0, fields) => {
+        if (error) throw error;
+        for (const result0 of results0) {
+            dbConn.query("INSERT INTO nodejsapi.danhsachrap SET ? ", {
+                maRap: Math.floor(Math.random() * 1000000),
+                tenRap: req.body.tenRap,
+                maCumRap: result0.cid
+            }, async (error, results1, fields) => {
+                if (error) throw error;
+            });
+        }
+    }
+    )
+    return res.send("Thêm rạp thành công.")
+})
 
 // QuanLyPhim
 
@@ -640,6 +741,14 @@ app.post('/api/QuanLyDatVe/DatVe', async (req, res) => {
                             tenRap = result2.tenRap;
                             tenPhim = result2.tenPhim;
                             time = result2.ngayChieuGioChieu;
+
+                            dbConn.query("INSERT INTO nodejsapi.thongke SET ? ", {
+                                tenPhim: result2.tenPhim,
+                                ngayMuaVe: new Date(),
+                                amount: req.body.amount/100
+                            }, function (error, results, fields) {
+                                if (error) throw error;
+                            })
 
                             console.log("LOG DAT VE", email, req.body.maLichChieu, listVe, tenRap, tenCumRap, tenPhim, time);
 
