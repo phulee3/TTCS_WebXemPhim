@@ -61,7 +61,7 @@ export default function MoviesManagement() {
           xAxis={[
             {
               id: 'barCategories',
-              data:  phim.map(item => item.thang),
+              data:  phim.map(item => item.tenPhim),
               scaleType: 'band',
             },
           ]}
