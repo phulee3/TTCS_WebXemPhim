@@ -789,6 +789,21 @@ app.post('/api/QuanLyDatVe/DatVe', async (req, res) => {
     return res.send("Success");
 });
 
+app.get('/api/QuanLyDatVe/LayLichChieu', async (req, res) => {
+    dbConn.query('select * from lichchieuinsert l where l.maLichChieu = ?', [req.query.MaLichChieu], function (error, results, fields) {
+        if (error) throw error;
+        return res.send(results);
+    });
+})
+
+app.put('/api/QuanLyDatVe/SuaLichChieu', async (req, res) => {
+    dbConn.query('UPDATE nodejsapi.lichchieuinsert SET ngayChieuGioChieu= ?, giaVe= ? WHERE maLichChieu= ? ', [req.body.time, req.body.gia, req.query.MaLichChieu], function (error, results, fields) {
+        if (error) throw error;
+        return res.send(results);
+    });
+})
+
+
 app.post('/api/QuanLyDatVe/TaoLichChieu', async (req, res) => {
     dbConn.query("INSERT INTO lichchieuinsert SET ? ", {
         ngayChieuGioChieu: req.body.ngayChieuGioChieu,

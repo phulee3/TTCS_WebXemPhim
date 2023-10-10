@@ -25,6 +25,7 @@ import TheaterComplex from "./pages/TheaterComplex";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Page404 from "./pages/Page404";
+import EditShowTime from "./pages/CreateShowtime/EditShowTime";
 function App() {
     return (
         <BrowserRouter>
@@ -52,7 +53,7 @@ function App() {
 
                     <Route
                         exact
-                        path={["/admin/users", "/admin/movies", "/admin/showtimes", "/admin/films/addnew", "/admin/ticket-management", "/admin/dashboard", "/admin/theater-complex", "/admin/cinema-management"]}
+                        path={["/admin/users", "/admin/movies", "/admin/showtimes", "/admin/films/addnew", "/admin/ticket-management", "/admin/dashboard", "/admin/theater-complex", "/admin/cinema-management","/admin/showtimes/:maLichChieu"]}
                     >
                         <AdminLayout>
                             <AdminRoute
@@ -69,6 +70,11 @@ function App() {
                                 exact
                                 path="/admin/showtimes"
                                 component={CreateShowtime}
+                            />
+                            <AdminRoute
+                                exact
+                                path="/admin/showtimes/:maLichChieu"
+                                component={EditShowTime}
                             />
                             <AdminRoute
                                 exact

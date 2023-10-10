@@ -12,6 +12,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
 import DateFnsUtils from "@date-io/date-fns";
 import {
     MuiPickersUtilsProvider,
@@ -29,6 +31,7 @@ import {
 import theatersApi from "../../api/theatersApi";
 import { getTheaters2, deleteLichChieu } from "../../reducers/actions/Theater";
 import ButtonDelete from "./ButtonDelete";
+import { useHistory } from "react-router-dom";
 
 function CustomLoadingOverlay() {
     return (
@@ -39,6 +42,7 @@ function CustomLoadingOverlay() {
 }
 
 export default function MoviesManagement() {
+    const history = useHistory();
     const [lichChieuDisplay, setLichChieuDisplay] = useState([]);
     const { enqueueSnackbar } = useSnackbar();
     const { theaterList2, loadingTheaterList2 } = useSelector(
@@ -405,6 +409,11 @@ export default function MoviesManagement() {
         dispatch(deleteLichChieu(maLichChieu));
     };
 
+    const onEdit = (maLichChieu) => {
+        console.log("Ma lich chieu", maLichChieu)
+        history.push("/admin/showtimes/"+maLichChieu);
+    }
+
     const columns = [
         {
             field: "xoa",
@@ -415,6 +424,21 @@ export default function MoviesManagement() {
                     onDeleted={handleDeleteOne}
                     maLichChieu={params.row.maLichChieu}
                 />
+            ),
+            headerAlign: "center",
+            align: "center",
+            headerClassName: "custom-header",
+        },
+        {
+            field: "sua",
+            headerName: "Sửa",
+            width: 100,
+            renderCell: (params) => (
+                <Tooltip title="Chỉnh sửa">
+                    <IconButton color="primary" style={{ color: "rgb(238, 130, 59)" }} onClick={() => onEdit(params.row.maLichChieu)} >
+                        <EditIcon />
+                    </IconButton>
+                </Tooltip>
             ),
             headerAlign: "center",
             align: "center",
