@@ -102,7 +102,7 @@ export default function Index() {
         (state) => state.usersManagementReducer
     );
     const { currentUser } = useSelector((state) => state.authReducer);
-    console.log("User", currentUser?.soDt )
+    console.log("User", currentUser?.soDt)
     const { commentList } = useSelector((state) => state.movieDetailReducer);
     const [dataShort, setdataShort] = useState({
         ticket: 0,
@@ -125,6 +125,7 @@ export default function Index() {
 
         usersApi.getDanhSachVeDaDat(currentUser?.taiKhoan).then((result) => {
             setDataVeDaDat(result.data);
+            console.log("VE",result.data);
         });
 
         return () => dispatch(resetUserList());
@@ -201,6 +202,12 @@ export default function Index() {
             }, [])
             .join(", ");
     };
+
+    const handleDeleteTicket = (maGhe, taiKhoanNguoiDat) => {
+        console.log("delete")
+        usersApi.deleteTicketOfUser({maGhe : maGhe , taiKhoanNguoiDat: taiKhoanNguoiDat});
+        window.location.reload();
+    }
     return (
         <div className="container rounded mb-5">
             <div className="row bg-white ">
@@ -387,7 +394,7 @@ export default function Index() {
                             <th>Ghế</th>
                             <th>Loại ghế</th>
                             <th>Giá vé</th>
-                            <th style={{ width : "100px"}}>Trạng Thái</th>
+                            <th style={{ width: "100px" }}>Trạng Thái</th>
                         </thead>
                         <tbody>
                             {dataVeDaDat.map((item) => (
@@ -400,7 +407,15 @@ export default function Index() {
                                     <td>{item.tenDayDu}</td>
                                     <td>{item.loaiGhe}</td>
                                     <td>{item.giaVe}</td>
-                                    <td>{item.status === true ? <><span style={{color : "green"}}>Đã xử lý</span></> : <span style={{color : "red"}}>Đang xử lý</span>}</td>
+                                    <td>{item.status === true ? <><span style={{ color: "green" }}>Đã xử lý</span></> : <span style={{ color: "red" }}>Đang xử lý</span>}</td>
+                                    <td>{item.status === true ?
+                                        <>
+                                            <button type="button" class="btn btn-primary" disabled>Không thể xóa</button>
+                                        </>
+                                        :
+                                        <>
+                                            <button type="button" class="btn btn-danger" onClick={() => handleDeleteTicket(item.maGhe, item.taiKhoanNguoiDat)}>Xóa</button>
+                                        </>}</td>
                                 </tr>
                             ))}
                         </tbody>

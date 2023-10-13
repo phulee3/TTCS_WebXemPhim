@@ -262,8 +262,11 @@ app.put('/api/QuanLyNguoiDung/CapNhatThongTinNguoiDung', function (req, res) {
 app.delete('/api/QuanLyNguoiDung/XoaNguoiDung', function (req, res) {
     dbConn.query('DELETE FROM nguoidungvm WHERE taiKhoan=?', [req.query.TaiKhoan], function (error, results, fields) {
         if (error) throw error;
-        return res.send(results);
     });
+
+    dbConn.query('DELETE FROM nodejsapi.datve WHERE taiKhoanNguoiDat = ? AND isConfirm = 0 ', [req.query.TaiKhoan] , function (error, results, fields) {
+        return res.send("Success");
+    })
 });
 
 // QuanLyRap
@@ -615,6 +618,12 @@ app.get('/api/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang', function (req, res) {
     });
 });
 
+app.delete('/api/DeleteTicketOfUser', function (req, res) {
+    console.log(req.query.maGhe,req.query.taiKhoanNguoiDat, "DELETE")
+    dbConn.query('DELETE FROM nodejsapi.datve WHERE maGhe= ? AND taiKhoanNguoiDat = ?', [req.query.maGhe,req.query.taiKhoanNguoiDat], async (error, results, fields) => {
+        if (error) throw error;
+        return res.send("Success");
+})})
 
 app.get('/api/QuanLyDatVe/LayDanhSachVeDaMua', function (req, res) {
     dbConn.query('SELECT * FROM lichchieuinsert JOIN phiminsertvalichchieuinsert ON lichchieuinsert.maLichChieu = phiminsertvalichchieuinsert.lichchieuinsert JOIN phiminsert ON phiminsert.maPhim = phiminsertvalichchieuinsert.phiminsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN datve ON datve.maLichChieu = lichchieuinsert.maLichChieu WHERE datve.taiKhoanNguoiDat = ? ORDER BY ngayChieuGioChieu DESC', [req.query.taiKhoanNguoiDat], async (error, results, fields) => {
@@ -623,6 +632,7 @@ app.get('/api/QuanLyDatVe/LayDanhSachVeDaMua', function (req, res) {
         var danhSachVe = [];
         for (var i = 0; i < results.length; i++) {
             danhSachVe.push({
+                "maGhe":  results[i].maGhe,
                 "maLichChieu": results[i].maLichChieu,
                 "tenCumRap": results[i].tenCumRap,
                 "tenRap": results[i].tenRap,
@@ -635,7 +645,8 @@ app.get('/api/QuanLyDatVe/LayDanhSachVeDaMua', function (req, res) {
                 "tenDayDu": results[i].tenDayDu,
                 "loaiGhe": results[i].loaiGhe,
                 "giaVe": results[i].giaVe,
-                "status": results[i].isConfirm?.readInt8() === 1
+                "status": results[i].isConfirm?.readInt8() === 1,
+                "taiKhoanNguoiDat": results[i].taiKhoanNguoiDat
             });
             console.log("Status Ticket:", results[i].isConfirm.readInt8() === 1)
         }

@@ -78,6 +78,11 @@ const usersApi = {
     getPhim : () => {
         const path = "ThongKe/getPhim";
         return axiosClient.get(path);
+    },
+
+    deleteTicketOfUser : (data) => {
+        const path = `/DeleteTicketOfUser?maGhe=${data.maGhe}&taiKhoanNguoiDat=${data.taiKhoanNguoiDat}`;
+        return axiosClient.delete(path)
     }
 };
 

@@ -414,6 +414,7 @@ export default function UsersManagement() {
         if (loadingDelete) {
             return;
         }
+        console.log("TAI KHOAN", taiKhoan)
         dispatch(deleteUser(taiKhoan));
     };
     // xóa nhiều user
