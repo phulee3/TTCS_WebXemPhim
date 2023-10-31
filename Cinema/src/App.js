@@ -20,6 +20,7 @@ import MoviesManagement from "./pages/MoviesManagement";
 import CreateShowtime from "./pages/CreateShowtime";
 import TicketManagemnt from "./pages/TicketManagement";
 import CinemaManagement from "./pages/CinemaManagement";
+import MovieGerne from "./pages/MovieGerne";
 import Dashboard from "./pages/Dashboard";
 import TheaterComplex from "./pages/TheaterComplex";
 import Login from "./pages/Login";
@@ -53,7 +54,7 @@ function App() {
 
                     <Route
                         exact
-                        path={["/admin/users", "/admin/movies", "/admin/showtimes", "/admin/films/addnew", "/admin/ticket-management", "/admin/dashboard", "/admin/theater-complex", "/admin/cinema-management","/admin/showtimes/:maLichChieu"]}
+                        path={["/admin/users", "/admin/movies", "/admin/showtimes", "/admin/films/addnew", "/admin/ticket-management", "/admin/dashboard", "/admin/theater-complex", "/admin/cinema-management", "/admin/showtimes/:maLichChieu", "/admin/movie-genre", "/admin/chair-management"]}
                     >
                         <AdminLayout>
                             <AdminRoute
@@ -95,6 +96,11 @@ function App() {
                                 exact
                                 path="/admin/theater-complex"
                                 component={TheaterComplex}
+                            />
+                            <AdminRoute
+                                exact
+                                path="/admin/movie-genre"
+                                component={MovieGerne}
                             />
                             <AdminRoute
                                 exact

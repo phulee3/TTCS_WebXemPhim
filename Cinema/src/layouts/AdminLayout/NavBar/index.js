@@ -4,6 +4,8 @@ import MovieIcon from '@material-ui/icons/Movie';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import MovieFilterIcon from '@material-ui/icons/MovieFilter';
+import EventSeatIcon from '@material-ui/icons/EventSeat';
+import MovieCreationTwoToneIcon from '@material-ui/icons/MovieCreationTwoTone';
 import TheatersIcon from '@material-ui/icons/Theaters';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PostAddIcon from '@material-ui/icons/PostAdd';
@@ -45,6 +47,16 @@ const items = [
     href: '/admin/cinema-management',
     icon: MovieFilterIcon,
     title: 'Cinema Management'
+  },
+  {
+    href: '/admin/movie-genre',
+    icon: MovieCreationTwoToneIcon,
+    title: 'Movie Genre'
+  },
+  {
+    href: '/admin/chair-management',
+    icon: EventSeatIcon,
+    title: 'Chair Management'
   },
   {
     href: '/admin/users',

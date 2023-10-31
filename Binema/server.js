@@ -285,6 +285,36 @@ app.get('/api/QuanLyRap/LayThongTinCumRap', function (req, res) {
     });
 });
 
+app.get('/api/QuanLyRap/LayThongTinTheLoaiPhim', function (req, res) {
+    dbConn.query('SELECT * FROM nodejsapi.theloaiphim', [], function (error, results, fields) {
+        if (error) throw error;
+        return res.send(results);
+    });
+});
+
+app.post('/api/QuanLyRap/AddTheLoaiPhim', function (req, res) {
+    dbConn.query("INSERT INTO nodejsapi.theloaiphim (name) VALUES(?)", [req.body.tenTheLoai], function (error, results, fields) {
+        if (error) throw error;
+        return res.send(results);
+    });
+});
+
+app.put('/api/QuanLyRap/UpdateTheLoaiPhim', function (req, res) {
+    dbConn.query("UPDATE nodejsapi.theloaiphim SET tenTheLoai=? WHERE id=?", [req.body.tenTheLoai, req.body.id], function (error, results, fields) {
+        if (error) throw error;
+        return res.send(results);
+    });
+});
+
+
+app.post('/api/QuanLyRap/DeleteTheLoaiPhim', function (req, res) {
+    dbConn.query("DELETE FROM nodejsapi.theloaiphim WHERE id=?", [req.body.id], function (error, results, fields) {
+        if (error) throw error;
+        return res.send(results);
+    });
+});
+
+
 app.get('/api/QuanLyRap/LayThongTinLichChieuHeThongRap', function (req, res) {
     const final = [];
     dbConn.query('SELECT * FROM hethongrap', [], async (error, results, fields) => {
@@ -424,7 +454,12 @@ app.get('/api/QuanLyRap/LayThongTinLichChieuPhim', function (req, res) {
             "moTa": results0[0].moTa,
             "maNhom": "GP09",
             "ngayKhoiChieu": results0[0].ngayKhoiChieu,
-            "danhGia": results0[0].danhGia
+            "danhGia": results0[0].danhGia,
+            "nhaSanXuat": results0[0].nhaSanXuat,
+            "daoDien": results0[0].daoDien,
+            "dienVien": results0[0].dienVien,
+            "maTheLoaiPhim": results0[0].maTheLoaiPhim,
+            "dinhDang": results0[0].dinhDang,
         }
         return res.send(final)
     });
@@ -568,7 +603,12 @@ app.get('/api/QuanLyPhim/LayThongTinPhim', function (req, res) {
                 "moTa": results0[0].moTa,
                 "maNhom": "GP09",
                 "ngayKhoiChieu": results0[0].ngayKhoiChieu,
-                "danhGia": results0[0].danhGia
+                "danhGia": results0[0].danhGia,
+                "nhaSanXuat": results0[0].nhaSanXuat,
+                "daoDien": results0[0].daoDien,
+                "dienVien": results0[0].dienVien,
+                "maTheLoaiPhim": results0[0].maTheLoaiPhim,
+                "dinhDang": results0[0].dinhDang,
             }
             return res.send(final)
         }
@@ -874,7 +914,12 @@ app.post('/api/QuanLyPhim/ThemPhim', async (req, res) => {
             "moTa": req.body.moTa,
             "maNhom": req.body.maNhom,
             "ngayKhoiChieu": req.body.ngayKhoiChieu,
-            "danhGia": req.body.danhGia
+            "danhGia": req.body.danhGia,
+            "nhaSanXuat": req.body.quocGiaSX,
+            "daoDien": req.body.daoDien,
+            "dienVien": req.body.dienVien,
+            "maTheLoaiPhim": req.body.maTheLoaiPhim,
+            "dinhDang": req.body.dinhDang
         }, function (error, results, fields) {
             if (error) throw error;
             resolve(res.send("Success"));
@@ -893,7 +938,12 @@ app.post('/api/QuanLyPhim/CapNhatPhim', async (req, res) => {
             "moTa": req.body.moTa,
             "maNhom": req.body.maNhom,
             "ngayKhoiChieu": req.body.ngayKhoiChieu,
-            "danhGia": req.body.danhGia
+            "danhGia": req.body.danhGia,
+            "nhaSanXuat": req.body.quocGiaSX,
+            "daoDien": req.body.daoDien,
+            "dienVien": req.body.dienVien,
+            "maTheLoaiPhim": req.body.maTheLoaiPhim,
+            "dinhDang": req.body.dinhDang
         }, req.body.maPhim], function (error, results, fields) {
             if (error) throw error;
             resolve(res.send("Success"));

@@ -65,25 +65,25 @@ export default function Desktop({ movieDetailShowtimes: data, isMobile }) {
               </div>
               <div className="row">
                 <p  className={`col-lg-3`}>Đạo diễn</p>
-                <p  className={`col-lg-3`}> Adam Wingard </p>
+                <p  className={`col-lg-3`}> {data?.daoDien} </p>
               </div>
               <div className="row">
                 <p  className={`col-lg-3`}>Diễn viên</p>
                 <p  className={`col-lg-3`}>
-                  Kyle Chandler, Rebecca Hall, Eiza González, Millie Bobby Brown
+                {data?.dienVien}
                 </p>
               </div>
               <div className="row">
                 <p  className={`col-lg-3`}>Thể Loại</p>
-                <p  className={`col-lg-3`}>hành động, giả tưởng, ly kỳ, thần thoại</p>
+                <p  className={`col-lg-3`}>{data?.maTheLoaiPhim}</p>
               </div>
               <div className="row">
                 <p  className={`col-lg-3`}>Định dạng</p>
-                <p  className={`col-lg-3`}>2D/Digital</p>
+                <p  className={`col-lg-3`}>{data?.dinhDang}</p>
               </div>
               <div className="row">
                 <p  className={`col-lg-3`}>Quốc Gia SX</p>
-                <p  className={`col-lg-3`}>Mỹ</p>
+                <p  className={`col-lg-3`}>{data?.nhaSanXuat}</p>
               </div>
             </div>
             <div className="row">

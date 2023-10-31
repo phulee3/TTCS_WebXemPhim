@@ -56,9 +56,28 @@ const theatersApi = {
     xoaRap : (data) => {
         const path = "/QuanLyRap/XoaRap";
         return axiosClient.post(path, data)
+    },
+
+
+    //CHUC NANG THE LOAI PHIM
+    getThongTinCuaTheLoaiPhim : () => {
+        const path = "/QuanLyRap/LayThongTinTheLoaiPhim";
+        return axiosClient.get(path);
+    },
+    addTheLoaiPhim : (data) => {
+        const path = "/QuanLyRap/AddTheLoaiPhim";
+        return axiosClient.post(path, data);
     }
-
-
+    ,
+    updateTheLoaiPhim : (data) => {
+        const path = "/QuanLyRap/UpdateTheLoaiPhim";
+        return axiosClient.put(path, data);
+    }
+    ,
+    deleteTheLoaiPhim : (id) => {
+        const path = "/QuanLyRap/DeleteTheLoaiPhim";
+        return axiosClient.post(path, id);
+    }
 };
 
 export default theatersApi;

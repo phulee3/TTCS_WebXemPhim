@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
@@ -11,11 +11,28 @@ import { ThemeProvider } from "@material-ui/styles";
 import FormControl from '@material-ui/core/FormControl';
 import { materialTheme } from './styles';
 import { useStyles } from './styles';
+import theatersApi from '../../api/theatersApi';
 
 export default function FormInput({ selectedPhim, onUpdate, onAddMovie }) {
     const classes = useStyles();
     const [srcImage, setSrcImage] = useState(selectedPhim?.hinhAnh)
     const [base64Img, setBase64Img] = useState(selectedPhim?.hinhAnh)
+    const [listTheater, setListTheater] = useState([]);
+    const [roomData, setRoomData] = useState({
+        maTheLoai: null,
+      });
+    useEffect(() => {
+        theatersApi.getThongTinCuaTheLoaiPhim().then(response => {
+            setListTheater(response.data)
+        })
+    }, [])
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setRoomData(prevState => ({
+          ...prevState,
+          [name]: value
+        }));
+      };
 
     const setThumbnailPreviews = (e) => {
         let file = e.target;
@@ -28,6 +45,10 @@ export default function FormInput({ selectedPhim, onUpdate, onAddMovie }) {
 
     const movieSchema = yup.object().shape({
         tenPhim: yup.string().required("*Không được bỏ trống!"),
+        daoDien: yup.string().required("*Không được bỏ trống!"),
+        dienVien: yup.string().required("*Không được bỏ trống!"),
+        dinhDang: yup.string().required("*Không được bỏ trống!"),
+        quocGiaSX: yup.string().required("*Không được bỏ trống!"),
         trailer: yup.string().required("*Không được bỏ trống!").matches(/^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/, "*Sai link youtube"),
         hinhAnh: yup.string().required("*Chưa chọn hình!"),
         moTa: yup.string().required("*Không được bỏ trống!").min(100, "Mô tả cần 100 ký tự trở lên!"),
@@ -41,14 +62,18 @@ export default function FormInput({ selectedPhim, onUpdate, onAddMovie }) {
         var ngayKC = addHours(movieObj.ngayKhoiChieu, 7);
         movieObj = { ...movieObj, ngayKhoiChieu: ngayKC }
         movieObj.hinhAnh = base64Img;
+        
         if (selectedPhim.maPhim) {
+            movieObj.maTheLoaPhim = roomData.maTheLoai;
             onUpdate(movieObj, hinhAnh, fakeImage)
             return
         }
         const newMovieObj = { ...movieObj }
+        newMovieObj.maTheLoaiPhim = roomData.maTheLoai;
         delete newMovieObj.maPhim
         delete newMovieObj.biDanh
         delete newMovieObj.danhGia
+        console.log(newMovieObj)
         onAddMovie(newMovieObj)
     }
 
@@ -98,6 +123,10 @@ export default function FormInput({ selectedPhim, onUpdate, onAddMovie }) {
                 biDanh: selectedPhim.biDanh,
                 trailer: selectedPhim.trailer,
                 hinhAnh: selectedPhim.hinhAnh,
+                daoDien: selectedPhim.daoDien,
+                dienVien: selectedPhim.dienVien,
+                dinhDang: selectedPhim.dinhDang,
+                quocGiaSX: selectedPhim.quocGiaSX,
                 moTa: selectedPhim.moTa,
                 maNhom: 'GP09',
                 ngayKhoiChieu: selectedPhim?.ngayKhoiChieu ? new Date(selectedPhim.ngayKhoiChieu) : new Date(),
@@ -134,9 +163,44 @@ export default function FormInput({ selectedPhim, onUpdate, onAddMovie }) {
                     </div>
                 </div>
                 <div className="form-group">
+                    <label>Đạo diễn&nbsp;</label>
+                    <ErrorMessage name="daoDien" render={msg => <span className="text-danger">{msg}</span>} />
+                    <Field as="textarea" name="daoDien" className="form-control" />
+                </div>
+                <div className="form-group">
+                    <label>Diễn viên&nbsp;</label>
+                    <ErrorMessage name="dienVien" render={msg => <span className="text-danger">{msg}</span>} />
+                    <Field as="textarea" name="dienVien" className="form-control" />
+                </div>
+                <div className="form-group">
+                    <label>Dinh dạng&nbsp;</label>
+                    <ErrorMessage name="dinhDang" render={msg => <span className="text-danger">{msg}</span>} />
+                    <Field as="textarea" name="dinhDang" className="form-control" />
+                </div>
+                <div className="form-group">
+                    <label>Quốc Gia SX&nbsp;</label>
+                    <ErrorMessage name="quocGiaSX" render={msg => <span className="text-danger">{msg}</span>} />
+                    <Field as="textarea" name="quocGiaSX" className="form-control" />
+                </div>
+                <div className="form-group">
                     <label>Mô tả&nbsp;</label>
                     <ErrorMessage name="moTa" render={msg => <span className="text-danger">{msg}</span>} />
                     <Field as="textarea" name="moTa" className="form-control" />
+                </div>
+                <div className="form-group">
+                    <label>Thể Loại Phim&nbsp;</label>
+                    <select
+                        className="form-control"
+                        name="maTheLoai"
+                        aria-label="Default select example"
+                        value={roomData.maTheLoai}
+                        onChange={handleInputChange}
+                    >
+                        <option>--Chọn Thể Loại Phim--</option>
+                        {listTheater.map(system => (
+                            <option key={system.id} value={system.id}>{system.tenTheLoai}</option>
+                        ))}
+                    </select>
                 </div>
                 <div className="form-group">
                     <label>Ngày khởi chiếu&nbsp;</label>
