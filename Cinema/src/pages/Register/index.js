@@ -62,7 +62,7 @@ export default function Register() {
 
   return (
     <>
-      <section className="ftco-section">
+      <section className="ftco-section" style={{marginBottom : "200px"}}>
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-md-6 text-center mb-5">
@@ -174,7 +174,6 @@ export default function Register() {
                             }}
                             className="btn btn-success mt-3 container"
                               type="submit"
-                              className="btn btn-success"
                               disable={loadingRegister.toString()}
                             >
                               Đăng Ký

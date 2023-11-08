@@ -51,6 +51,12 @@ const usersApi = {
         const path = `/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang`;
         return axiosClient.get(path);
     },
+
+    getVe : (taiKhoanNguoiDat, maGhe) => {
+        const path = `/QuanLyDatVe/LayVeTheoMaGhe?taiKhoanNguoiDat=${taiKhoanNguoiDat}&maGhe=${maGhe}`;
+        return axiosClient.get(path);
+    },
+
     creatPaymentUrl: (amount, maLichChieu, danhSachVe, taiKhoanNguoiDung) => {
         const path = '/create_payment_url';
         const params = {

@@ -5,9 +5,11 @@ import { useSnackbar } from "notistack";
 import slugify from "slugify";
 
 import usersApi, { getDanhSachVeDaDat } from "../../api/usersApi";
+import { useHistory } from "react-router-dom";
 
 export default function MoviesManagement() {
   const [datVeDaDat, setDatVeDaDat] = useState([]);
+  const history = useHistory()
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -49,6 +51,11 @@ export default function MoviesManagement() {
         // Xử lý lỗi
       });
   };
+
+  const handleButtonInvoiceClick = (params) => { 
+    const url = `/invoice?maghe=${params.row.maGhe}&taiKhoan=${params.row.tenTaiKhoan}`;
+    window.open(url, "_blank");
+  }
 
   const columns = [
     {
@@ -163,6 +170,21 @@ export default function MoviesManagement() {
         }
       }
     }
+,{
+  field: 'invoice',
+  headerName: 'Hóa đơn',
+  width: 130,
+  headerAlign: 'center',
+  align: 'center',
+  sortable: false,
+  renderCell: (params) => {
+      return (
+        <button type="button" className="btn btn-success" onClick={() => handleButtonInvoiceClick(params)}>
+          Hóa Đơn
+        </button>
+      );
+  }
+}
 
   ];
 

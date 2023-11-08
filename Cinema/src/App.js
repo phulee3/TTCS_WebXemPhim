@@ -27,6 +27,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Page404 from "./pages/Page404";
 import EditShowTime from "./pages/CreateShowtime/EditShowTime";
+import Invoice from "./pages/TicketManagement/invoice";
 function App() {
     return (
         <BrowserRouter>
@@ -54,7 +55,7 @@ function App() {
 
                     <Route
                         exact
-                        path={["/admin/users", "/admin/movies", "/admin/showtimes", "/admin/films/addnew", "/admin/ticket-management", "/admin/dashboard", "/admin/theater-complex", "/admin/cinema-management", "/admin/showtimes/:maLichChieu", "/admin/movie-genre", "/admin/chair-management"]}
+                        path={["/admin/users", "/admin/movies", "/admin/showtimes", "/admin/films/addnew", "/admin/ticket-management", "/admin/dashboard", "/admin/theater-complex", "/admin/cinema-management", "/admin/showtimes/:maLichChieu", "/admin/movie-genre", "/admin/chair-management", "/invoice"]}
                     >
                         <AdminLayout>
                             <AdminRoute
@@ -105,6 +106,11 @@ function App() {
                             <AdminRoute
                                 exact
                                 path="/admin/films/addnew"
+                            />
+                            <AdminRoute
+                                exact
+                                path="/invoice"
+                                component={Invoice}
                             />
                         </AdminLayout>
                     </Route>

@@ -658,6 +658,37 @@ app.get('/api/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang', function (req, res) {
     });
 });
 
+app.get('/api/QuanLyDatVe/LayVeTheoMaGhe', function (req, res) {
+    dbConn.query('SELECT * FROM lichchieuinsert JOIN phiminsertvalichchieuinsert ON lichchieuinsert.maLichChieu = phiminsertvalichchieuinsert.lichchieuinsert JOIN phiminsert ON phiminsert.maPhim = phiminsertvalichchieuinsert.phiminsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN datve ON datve.maLichChieu = lichchieuinsert.maLichChieu where datve.maGhe = ? and datve.taiKhoanNguoiDat = ?', [req.query.maGhe, req.query.taiKhoanNguoiDat] , async (error, results, fields) => {
+        if (error) throw error;
+
+        var danhSachVe = [];
+
+        for (var i = 0; i < results.length; i++) {
+            danhSachVe.push({
+                "maLichChieu": results[i].maLichChieu,
+                "tenCumRap": results[i].tenCumRap,
+                "tenRap": results[i].tenRap,
+                "diaChi": results[i].diaChi,
+                "tenPhim": results[i].tenPhim,
+                "hinhAnh": results[i].hinhAnh,
+                "ngayChieu": results[i].ngayChieuGioChieu,
+                "gioChieu": results[i].ngayChieuGioChieu,
+                "maGhe": results[i].maGhe,
+                "tenGhe": results[i].tenGhe,
+                "tenDayDu": results[i].tenDayDu,
+                "loaiGhe": results[i].loaiGhe,
+                "giaVe": results[i].giaVe,
+                "tenTaiKhoan": results[i].taiKhoanNguoiDat,
+                "loaiGhe": results[i].giaVe > 75000 ? "Vip" : "Thường",
+                "isConfirm": results[i].isConfirm.readInt8() === 1
+            });
+            console.log(danhSachVe)
+        }
+        return res.send(danhSachVe);
+    });
+});
+
 app.delete('/api/DeleteTicketOfUser', function (req, res) {
     console.log(req.query.maGhe,req.query.taiKhoanNguoiDat, "DELETE")
     dbConn.query('DELETE FROM nodejsapi.datve WHERE maGhe= ? AND taiKhoanNguoiDat = ?', [req.query.maGhe,req.query.taiKhoanNguoiDat], async (error, results, fields) => {
