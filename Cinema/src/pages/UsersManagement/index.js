@@ -29,6 +29,7 @@ import {
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import Action from "./Action";
 import Form from "./Form";
+import usersApi from "../../api/usersApi";
 
 function validateEmail(email) {
     const re =
@@ -75,6 +76,7 @@ export default function UsersManagement() {
     } = useSelector((state) => state.usersManagementReducer);
     const dispatch = useDispatch();
     const [btnReFresh, setBtnReFresh] = useState("");
+    const [data, setData] = useState([]);
     const [sortBy, setsortBy] = useState({ field: "taiKhoan", sort: "asc" });
     const [valueSearch, setValueSearch] = useState("");
     const clearSetSearch = useRef(0);
@@ -414,8 +416,24 @@ export default function UsersManagement() {
         if (loadingDelete) {
             return;
         }
-        console.log("TAI KHOAN", taiKhoan)
-        dispatch(deleteUser(taiKhoan));
+        let flag = false;
+        usersApi.getDanhSachVeDaDat(taiKhoan).then((result) => {
+            setData(result.data);
+            console.log("VE", result.data);
+        });
+        data.forEach((d) => {
+            if (d.status === true) {
+              flag = true;
+            } else {
+              flag = false;
+            }
+          });
+        if (flag === true) {
+            dispatch(deleteUser(taiKhoan));
+        } else {
+            alert("Tài khoản không thể xóa vì vé chưa được xác thực!!!")
+        }
+
     };
     // xóa nhiều user
     const handleDeleteMultiple = () => {
@@ -530,7 +548,7 @@ export default function UsersManagement() {
                     renderCell: (params) => (
                         <Action
                             onEdit={handleEdit}
-                            onDeleted={handleDeleteOne}
+                            onDeleted={() => handleDeleteOne(params.row.taiKhoan)}
                             nguoiDungItem={params.row}
                         />
                     ),

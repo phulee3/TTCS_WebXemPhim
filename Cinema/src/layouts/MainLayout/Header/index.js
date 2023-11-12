@@ -98,7 +98,7 @@ export default function Header() {
     return (
         <div className="header">
             <div className="" onClick={handleClickLogo}>
-                <img src="/img/cinema.png" alt="logo" style={{ height: 50 }} />
+                <img src="https://t3.ftcdn.net/jpg/04/66/39/50/360_F_466395040_mj2YjwJe0qLlRXQk51kg0q8Jw9AwJp5r.jpg" alt="logo" style={{ height: 50 }} />
             </div>
             <div className="row">
                 <div

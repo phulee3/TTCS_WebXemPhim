@@ -411,7 +411,7 @@ export default function MoviesManagement() {
 
     const onEdit = (maLichChieu) => {
         console.log("Ma lich chieu", maLichChieu)
-        history.push("/admin/showtimes/"+maLichChieu);
+        history.push("/admin/showtimes/" + maLichChieu);
     }
 
     const columns = [
@@ -545,6 +545,10 @@ export default function MoviesManagement() {
     };
     const modifySlugify = { lower: true, locale: "vi" };
 
+    const disablePastDates = (date) => {
+        return date < new Date(); // Chỉ cho phép chọn ngày hiện tại và tương lai
+      };
+      
     return (
         <div style={{ height: "100vh", paddingBottom: "400px", width: "100%" }}>
             <div className={classes.control}>
@@ -755,17 +759,15 @@ export default function MoviesManagement() {
                                                     open={data.openCtr.ngayChieuGioChieu}
                                                     onClose={handleCloseNgayChieuGioChieu}
                                                     onOpen={handleOpenNgayChieuGioChieu}
-                                                    inputValue={
-                                                        selectedDate ? null : "Chọn ngày, giờ chiếu"
-                                                    }
-                                                    invalidDateMessage={
-                                                        selectedDate ? "Invalid Date Format" : ""
-                                                    }
+                                                    inputValue={selectedDate ? null : "Chọn ngày, giờ chiếu"}
+                                                    invalidDateMessage={selectedDate ? "Invalid Date Format" : ""}
                                                     value={selectedDate}
                                                     onChange={handleDateChange}
                                                     format="yyyy-MM-dd, HH:mm"
                                                     onAccept={handleDateAccept}
                                                     ampm={false}
+                                                    minDate={new Date()} // Giới hạn ngày nhỏ nhất là ngày hiện tại
+                                                    shouldDisableDate={disablePastDates} // Tự động vô hiệu hóa các ngày quá khứ
                                                 />
                                             </ThemeProvider>
                                         </MuiPickersUtilsProvider>
