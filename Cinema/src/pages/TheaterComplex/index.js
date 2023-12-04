@@ -272,7 +272,7 @@ const columns = [
             <Action
                 onEdit={handleEdit}
                 onDeleted={() => handleDeleteOne(params.row.maCumRap)}
-                phimItem={params.row.maCumRap}
+                phimItem={params.row}
             />
         ),
         headerAlign: "center",

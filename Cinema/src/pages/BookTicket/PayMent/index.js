@@ -41,7 +41,7 @@ const makeObjError = (name, value, dataSubmit) => {
 export default function PayMent() {
     const history = useHistory();
     const { currentUser } = useSelector((state) => state.authReducer);
-    console.log('SĐT',currentUser?.soDt)
+    console.log('SĐT', currentUser?.soDt)
     const location = useLocation();
     const {
         listSeat,
@@ -170,7 +170,7 @@ export default function PayMent() {
             console.log('Ma Lich Chieu:', maLichChieu);
             console.log('Tai Khoan: ', taiKhoanNguoiDung)
             console.log('Danh sach ve: ', danhSachVe)
-            dispatch(BookTicket({ maLichChieu, danhSachVe, taiKhoanNguoiDung , amount, tenPhim}));
+            dispatch(BookTicket({ maLichChieu, danhSachVe, taiKhoanNguoiDung, amount, tenPhim }));
         }
     }, [location.search, dispatch]);
 
@@ -193,91 +193,94 @@ export default function PayMent() {
     console.log("Số điện thoại", dataSubmit)
 
     return (
-        <aside className={classes.payMent}>
-            <div>
-                <p className={`${classes.amount} ${classes.payMentItem}`}>
-                    {`${amount.toLocaleString("vi-VI")} đ`}
-                </p>
-                <div className={classes.payMentItem}>
-                    <p className={classes.tenPhim}>{thongTinPhim?.tenPhim}</p>
-                    <p>{thongTinPhim?.tenCumRap}</p>
-                    <p>{`${thongTinPhim?.tenRap}`}</p>
-                </div>
-
-                <div className={`${classes.seatInfo} ${classes.payMentItem}`}>
-                    <span>{`Ghế ${listSeatSelected?.join(", ")}`}</span>
-                    <p className={classes.amountLittle}>
+        <aside className={`container ${classes.payMent}`}>
+            <div className="row">
+                <div className="col-md-12">
+                    <p className={`${classes.amount} ${classes.payMentItem}`}>
                         {`${amount.toLocaleString("vi-VI")} đ`}
                     </p>
                 </div>
-
-                {/* email */}
-                <div className={classes.payMentItem}>
-                    <label className={classes.labelEmail}>E-Mail</label>
-                    <input
-                        type="text"
-                        name="email"
-                        ref={emailRef}
-                        onFocus={onFocus}
-                        onBlur={onBlur}
-                        value={dataSubmit.values.email}
-                        className={classes.fillInEmail}
-                        onChange={onChange}
-                        autoComplete="off"
-                    />
-                    <p className={classes.error}>{dataSubmit.errors.email}</p>
+                <div className="col-md-12">
+                    <div className={classes.payMentItem}>
+                        <p className={classes.tenPhim}>{thongTinPhim?.tenPhim}</p>
+                        <p>{thongTinPhim?.tenCumRap}</p>
+                        <p>{`${thongTinPhim?.tenRap}`}</p>
+                    </div>
                 </div>
-
-                {/* phone */}
-                <div className={classes.payMentItem}>
-                    <label className={classes.labelPhone}>Phone</label> <br></br>
-                    <input
-                        type="number"
-                        name="phone"
-                        ref={phoneRef}
-                        onFocus={onFocus}
-                        onBlur={onBlur}
-                        value={currentUser?.soDt}
-                        className={classes.fillInPhone}
-                        onChange={onChange}
-                        autoComplete="off"
-                    />
-                    <p className={classes.error}>{dataSubmit.errors.phone}</p>
+                <div className="col-md-12">
+                    <div className={`${classes.seatInfo} ${classes.payMentItem}`}>
+                        <span>{`Ghế ${listSeatSelected?.join(", ")}`}</span>
+                        <p className={classes.amountLittle}>
+                            {`${amount.toLocaleString("vi-VI")} đ`}
+                        </p>
+                    </div>
                 </div>
-
-
-
-                {/* Mã giảm giá */}
-                <div className={classes.payMentItem}>
-                    <label className={classes.label}>Mã giảm giá</label>
-                    <input
-                        type="text"
-                        value="Tạm thời không hỗ trợ..."
-                        readOnly
-                        className={classes.fillIn}
-                    />
-                    <button className={classes.btnDiscount} disabled>
-                        Áp dụng
-                    </button>
+                <div className="col-md-12">
+                    <div className={classes.payMentItem}>
+                        <label className={classes.labelEmail}>E-Mail</label>
+                        <input
+                            type="text"
+                            name="email"
+                            ref={emailRef}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
+                            value={dataSubmit.values.email}
+                            className={classes.fillInEmail}
+                            onChange={onChange}
+                            autoComplete="off"
+                        />
+                        <p className={classes.error}>{dataSubmit.errors.email}</p>
+                    </div>
                 </div>
-                {/* đặt vé */}
-                <div className="">
+                <div className="col-md-12">
+                    <div className={classes.payMentItem}>
+                        <label className={classes.labelPhone}>Phone</label>
+                        <br />
+                        <input
+                            type="number"
+                            name="phone"
+                            ref={phoneRef}
+                            onFocus={onFocus}
+                            onBlur={onBlur}
+                            value={currentUser?.soDt}
+                            className={classes.fillInPhone}
+                            onChange={onChange}
+                            autoComplete="off"
+                        />
+                        <p className={classes.error}>{dataSubmit.errors.phone}</p>
+                    </div>
+                </div>
+                <div className="col-md-12 d-none d-md-block">
+                    <div className={classes.payMentItem}>
+                        <label className={classes.label}>Mã giảm giá</label>
+                        <input
+                            type="text"
+                            value="Tạm thời không hỗ trợ..."
+                            readOnly
+                            className={classes.fillIn}
+                        />
+                        <button className={`${classes.btnDiscount} btn btn-primary`} disabled>
+                            Áp dụng
+                        </button>
+                    </div>
+                </div>
+                <div className="col-md-12">
                     <button
-                        className={classes.btnDV}
+                        className={`${classes.btnDV} btn btn-primary`}
                         // disabled={!isReadyPayment}
                         onClick={handleBookTicket}
                     >
                         Đặt Vé
                     </button>
                 </div>
-                <div className="">
+                <div className="col-md-12">
                     <a href="/">
-                    <button type="button" className={classes.btnDV}>
-                        Quay lại trang chủ →
-                    </button>
+                        <button type="button" className={`${classes.btnDV} btn btn-primary`}>
+                            Quay lại trang chủ →
+                        </button>
                     </a>
                 </div>
             </div>
         </aside>
-    );
+    )
 }

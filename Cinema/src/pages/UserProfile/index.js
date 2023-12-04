@@ -125,7 +125,7 @@ export default function Index() {
 
         usersApi.getDanhSachVeDaDat(currentUser?.taiKhoan).then((result) => {
             setDataVeDaDat(result.data);
-            console.log("VE",result.data);
+            console.log("VE", result.data);
         });
 
         return () => dispatch(resetUserList());
@@ -205,12 +205,12 @@ export default function Index() {
 
     const handleDeleteTicket = (maGhe, taiKhoanNguoiDat) => {
         console.log("delete")
-        usersApi.deleteTicketOfUser({maGhe : maGhe , taiKhoanNguoiDat: taiKhoanNguoiDat});
+        usersApi.deleteTicketOfUser({ maGhe: maGhe, taiKhoanNguoiDat: taiKhoanNguoiDat });
         window.location.reload();
     }
     return (
         <div className="container rounded mb-5">
-            <div className="row bg-white ">
+            <div className="row bg-white">
                 <div className="col-md-3 border-right">
                     <div className="d-flex flex-column align-items-center text-center p-3 py-5">
                         <img
@@ -334,7 +334,7 @@ export default function Index() {
                                         <button
                                             type="submit"
                                             className="btn btn-success"
-                                            disable={loadingUpdateUser.toString()}
+                                            disabled={loadingUpdateUser.toString()}
                                         >
                                             Cập nhật
                                         </button>
@@ -353,75 +353,81 @@ export default function Index() {
                     <ul className="list-group">
                         {" "}
                         <li className="list-group-item text-muted">Hoạt động</li>{" "}
-                        <li className="list-group-item text-right">
-                            {" "}
+                        <li className="list-group-item d-flex justify-content-between align-items-center">
                             <span className="float-left">
-                                {" "}
-                                <strong>Bình luận</strong>{" "}
+                                <strong>Bình luận</strong>
                             </span>{" "}
-                            {dataShort.posts}{" "}
+                            <span className="badge bg-primary rounded-pill">{dataShort.posts}</span>
                         </li>{" "}
-                        <li className="list-group-item text-right">
-                            {" "}
+                        <li className="list-group-item d-flex justify-content-between align-items-center">
                             <span className="float-left">
-                                {" "}
-                                <strong>Bình luận được thích </strong>{" "}
+                                <strong>Bình luận được thích</strong>
                             </span>{" "}
-                            {dataShort.likePosts}{" "}
+                            <span className="badge bg-primary rounded-pill">{dataShort.likePosts}</span>
                         </li>{" "}
-                        <li className="list-group-item text-right">
+                        <li className="list-group-item d-flex justify-content-between align-items-center">
                             <span className="float-left">
                                 <strong>Số lần thanh toán</strong>
                             </span>
-                            {dataShort.ticket}
+                            <span className="badge bg-primary rounded-pill">{dataShort.ticket}</span>
                         </li>
-                        <li className="list-group-item text-right">
+                        <li className="list-group-item d-flex justify-content-between align-items-center">
                             <span className="float-left">
                                 <strong>Tổng tiền $</strong>
                             </span>
-                            {dataShort.total}
+                            <span className="badge bg-primary rounded-pill">{dataShort.total}</span>
                         </li>
                     </ul>
                 </div>
                 <div className="col-md-12">
-                    <table className="table">
-                        <thead>
-                            <th>Tên Phim</th>
-                            <th>Tên cụm rạp</th>
-                            <th>Tên rạp</th>
-                            <th>Địa chỉ</th>
-                            <th>Ngày chiếu</th>
-                            <th>Ghế</th>
-                            <th>Loại ghế</th>
-                            <th>Giá vé</th>
-                            <th style={{ width: "100px" }}>Trạng Thái</th>
-                        </thead>
-                        <tbody>
-                            {dataVeDaDat.map((item) => (
-                                <tr>
-                                    <td>{item.tenPhim}</td>
-                                    <td>{item.tenCumRap}</td>
-                                    <td>{item.tenRap}</td>
-                                    <td>{item.diaChi}</td>
-                                    <td>{item.ngayChieu}</td>
-                                    <td>{item.tenDayDu}</td>
-                                    <td>{item.loaiGhe}</td>
-                                    <td>{item.giaVe}</td>
-                                    <td>{item.status === true ? <><span style={{ color: "green" }}>Đã xử lý</span></> : <span style={{ color: "red" }}>Đang xử lý</span>}</td>
-                                    <td>{item.status === true ?
-                                        <>
-                                            <button type="button" class="btn btn-primary" disabled>Không thể xóa</button>
-                                        </>
-                                        :
-                                        <>
-                                            <button type="button" class="btn btn-danger" onClick={() => handleDeleteTicket(item.maGhe, item.taiKhoanNguoiDat)}>Xóa</button>
-                                        </>}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <div className="table-responsive"> {/* Thêm lớp table-responsive */}
+                        <table className="table">
+                            <tr>
+                                <th>Tên Phim</th>
+                                <th>Tên cụm rạp</th>
+                                <th>Tên rạp</th>
+                                <th>Địa chỉ</th>
+                                <th>Ngày chiếu</th>
+                                <th>Ghế</th>
+                                <th>Loại ghế</th>
+                                <th>Giá vé</th>
+                                <th style={{ width: "100px" }}>Trạng Thái</th>
+                                <th></th>
+                            </tr>
+                            <tbody>
+                                {dataVeDaDat.map((item) => (
+                                    <tr key={item.maVe}>
+                                        <td>{item.tenPhim}</td>
+                                        <td>{item.tenCumRap}</td>
+                                        <td>{item.tenRap}</td>
+                                        <td>{item.diaChi}</td>
+                                        <td>{item.ngayChieu}</td>
+                                        <td>{item.tenDayDu}</td>
+                                        <td>{item.loaiGhe}</td>
+                                        <td>{item.giaVe}</td>
+                                        <td>
+                                            {item.daThanhToan ? (
+                                                <span className="badge bg-success">Đã thanh toán</span>
+                                            ) : (
+                                                <span className="badge bg-warning">Chưa thanh toán</span>
+                                            )}
+                                        </td>
+                                        <td>
+                                            <button
+                                                className="btn btn-danger"
+                                                onClick={() => handleDeleteTicket(item.maVe)}
+                                            >
+                                                Hủy
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+
     );
 }

@@ -269,7 +269,7 @@ export default function MoviesManagement() {
                 <Action
                     onEdit={handleEdit}
                     onDeleted={() => handleDeleteOne(params.row.maRap)}
-                    phimItem={params.row.maRap}
+                    phimItem={params.row}
                 />
             ),
             headerAlign: "center",
