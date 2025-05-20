@@ -60,6 +60,38 @@ const validateToken = (req, res) => {
         return res.status(401).send(error);
     }
 }
+
+// Danh sach Banner
+
+app.get('/api/QuanLyPhim/LayDanhSachBanner', (req, res) => {
+    const banners = [
+        {
+            maBanner: 1,
+            maPhim: 1282,
+            hinhAnh: "https://kenh14cdn.com/203336854389633024/2025/4/27/landscapeavatarcopy90557b580-7e0d-4305-a306-5d0615d8086b-1745668232982630934548-1745768336934-1745768337934948507153.jpg"
+        },
+        {
+            maBanner: 2,
+            maPhim: 1283,
+            hinhAnh: "https://media-cdn-v2.laodong.vn/storage/newsportal/2025/5/2/1500372/Hq720-2.jpg"
+        },
+        {
+            maBanner: 3,
+            maPhim: 1284,
+            hinhAnh: "https://kenh14cdn.com/203336854389633024/2025/5/20/ngangcopy2742716ff-1bcf-43b3-b951-27b9e4c0eadf-1747648132674983495790-1747699738210-1747699738435998076680.jpg"
+        }
+    ];
+
+    res.status(200).json({
+        statusCode: 200,
+        message: "Xử lý thành công!",
+        content: banners
+    })
+});
+
+
+
+
 // VNPay
 app.get('/api/create_payment_url', function (req, res, next) {
 
@@ -264,7 +296,7 @@ app.delete('/api/QuanLyNguoiDung/XoaNguoiDung', function (req, res) {
         if (error) throw error;
     });
 
-    dbConn.query('DELETE FROM nodejsapi.datve WHERE taiKhoanNguoiDat = ? AND isConfirm = 0 ', [req.query.TaiKhoan] , function (error, results, fields) {
+    dbConn.query('DELETE FROM nodejsapi.datve WHERE taiKhoanNguoiDat = ? AND isConfirm = 0 ', [req.query.TaiKhoan], function (error, results, fields) {
         return res.send("Success");
     })
 });
@@ -476,7 +508,7 @@ app.post('/api/QuanLyRap/AddCumRap', function (req, res) {
     dbConn.query('SELECT * FROM nodejsapi.cumrap where  maCumRap = ?', [req.body.maCumRap], async (error, results0, fields) => {
         if (error) throw error;
         for (const result0 of results0) {
-            dbConn.query("INSERT INTO nodejsapi.hethongrapvacumrap (hethongrap, cumrap) VALUES(?, ?)", [req.body.hid ,result0.cid], async (error, results1, fields) => {
+            dbConn.query("INSERT INTO nodejsapi.hethongrapvacumrap (hethongrap, cumrap) VALUES(?, ?)", [req.body.hid, result0.cid], async (error, results1, fields) => {
                 if (error) throw error;
             });
         }
@@ -487,13 +519,13 @@ app.post('/api/QuanLyRap/AddCumRap', function (req, res) {
 
 
 app.put('/api/QuanLyRap/SuaCumRap', function (req, res) {
-    dbConn.query('UPDATE nodejsapi.cumrap SET maCumRap=?, tenCumRap=?, diaChi=? WHERE maCumRap = ?',[req.body.maCumRap, req.body.tenCumRap, req.body.diaChi, req.body.maCumRap], function (error, results, fields) {
+    dbConn.query('UPDATE nodejsapi.cumrap SET maCumRap=?, tenCumRap=?, diaChi=? WHERE maCumRap = ?', [req.body.maCumRap, req.body.tenCumRap, req.body.diaChi, req.body.maCumRap], function (error, results, fields) {
         if (error) throw error;
-    } )
+    })
 });
 
 app.post('/api/QuanLyRap/XoaCumRap', function (req, res) {
-    dbConn.query('DELETE FROM nodejsapi.cumrap WHERE maCumRap = ?',[req.body.maCumRap], function (error, results, fields) {
+    dbConn.query('DELETE FROM nodejsapi.cumrap WHERE maCumRap = ?', [req.body.maCumRap], function (error, results, fields) {
         if (error) throw error;
     })
 
@@ -511,13 +543,13 @@ app.post('/api/QuanLyRap/XoaCumRap', function (req, res) {
 // QUAN LY DANH SACH RAP
 
 app.put('/api/QuanLyRap/SuaRap', function (req, res) {
-    dbConn.query('UPDATE nodejsapi.danhsachrap SET tenRap= ? WHERE maRap = ?',[req.body.tenRap, req.body.maRap], function (error, results, fields) {
+    dbConn.query('UPDATE nodejsapi.danhsachrap SET tenRap= ? WHERE maRap = ?', [req.body.tenRap, req.body.maRap], function (error, results, fields) {
         if (error) throw error;
-    } )
+    })
 });
 
 app.post('/api/QuanLyRap/XoaRap', function (req, res) {
-    dbConn.query('DELETE FROM nodejsapi.danhsachrap WHERE maRap = ?',[req.body.maRap], function (error, results, fields) {
+    dbConn.query('DELETE FROM nodejsapi.danhsachrap WHERE maRap = ?', [req.body.maRap], function (error, results, fields) {
         if (error) throw error;
     })
 });
@@ -659,7 +691,7 @@ app.get('/api/QuanLyDatVe/LayDanhSachVeDaMuaCuaKhachHang', function (req, res) {
 });
 
 app.get('/api/QuanLyDatVe/LayVeTheoMaGhe', function (req, res) {
-    dbConn.query('SELECT * FROM lichchieuinsert JOIN phiminsertvalichchieuinsert ON lichchieuinsert.maLichChieu = phiminsertvalichchieuinsert.lichchieuinsert JOIN phiminsert ON phiminsert.maPhim = phiminsertvalichchieuinsert.phiminsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN datve ON datve.maLichChieu = lichchieuinsert.maLichChieu where datve.maGhe = ? and datve.taiKhoanNguoiDat = ?', [req.query.maGhe, req.query.taiKhoanNguoiDat] , async (error, results, fields) => {
+    dbConn.query('SELECT * FROM lichchieuinsert JOIN phiminsertvalichchieuinsert ON lichchieuinsert.maLichChieu = phiminsertvalichchieuinsert.lichchieuinsert JOIN phiminsert ON phiminsert.maPhim = phiminsertvalichchieuinsert.phiminsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN datve ON datve.maLichChieu = lichchieuinsert.maLichChieu where datve.maGhe = ? and datve.taiKhoanNguoiDat = ?', [req.query.maGhe, req.query.taiKhoanNguoiDat], async (error, results, fields) => {
         if (error) throw error;
 
         var danhSachVe = [];
@@ -690,11 +722,12 @@ app.get('/api/QuanLyDatVe/LayVeTheoMaGhe', function (req, res) {
 });
 
 app.delete('/api/DeleteTicketOfUser', function (req, res) {
-    console.log(req.query.maGhe,req.query.taiKhoanNguoiDat, "DELETE")
-    dbConn.query('DELETE FROM nodejsapi.datve WHERE maGhe= ? AND taiKhoanNguoiDat = ?', [req.query.maGhe,req.query.taiKhoanNguoiDat], async (error, results, fields) => {
+    console.log(req.query.maGhe, req.query.taiKhoanNguoiDat, "DELETE")
+    dbConn.query('DELETE FROM nodejsapi.datve WHERE maGhe= ? AND taiKhoanNguoiDat = ?', [req.query.maGhe, req.query.taiKhoanNguoiDat], async (error, results, fields) => {
         if (error) throw error;
         return res.send("Success");
-})})
+    })
+})
 
 app.get('/api/QuanLyDatVe/LayDanhSachVeDaMua', function (req, res) {
     dbConn.query('SELECT * FROM lichchieuinsert JOIN phiminsertvalichchieuinsert ON lichchieuinsert.maLichChieu = phiminsertvalichchieuinsert.lichchieuinsert JOIN phiminsert ON phiminsert.maPhim = phiminsertvalichchieuinsert.phiminsert JOIN cumrapvalichchieuinsert ON lichchieuinsert.maLichChieu = cumrapvalichchieuinsert.lichchieuinsert JOIN cumrap ON cumrap.cid = cumrapvalichchieuinsert.cumrap JOIN datve ON datve.maLichChieu = lichchieuinsert.maLichChieu WHERE datve.taiKhoanNguoiDat = ? ORDER BY ngayChieuGioChieu DESC', [req.query.taiKhoanNguoiDat], async (error, results, fields) => {
@@ -703,7 +736,7 @@ app.get('/api/QuanLyDatVe/LayDanhSachVeDaMua', function (req, res) {
         var danhSachVe = [];
         for (var i = 0; i < results.length; i++) {
             danhSachVe.push({
-                "maGhe":  results[i].maGhe,
+                "maGhe": results[i].maGhe,
                 "maLichChieu": results[i].maLichChieu,
                 "tenCumRap": results[i].tenCumRap,
                 "tenRap": results[i].tenRap,
@@ -827,7 +860,7 @@ app.post('/api/QuanLyDatVe/DatVe', async (req, res) => {
                             dbConn.query("INSERT INTO nodejsapi.thongke SET ? ", {
                                 tenPhim: result2.tenPhim,
                                 ngayMuaVe: new Date(),
-                                amount: req.body.amount/100
+                                amount: req.body.amount / 100
                             }, function (error, results, fields) {
                                 if (error) throw error;
                             })

@@ -32,7 +32,7 @@ export default function MainLayout(props) {
 
     return (
         <div>
-            <div dangerouslySetInnerHTML={{
+            {/* <div dangerouslySetInnerHTML={{
                 __html: `
                     <df-messenger intent="WELCOME"
                         chat-title="Cinema"
@@ -41,7 +41,7 @@ export default function MainLayout(props) {
                         id="chatbot"
                         name="chatbot">
                     </df-messenger>
-                ` }} />
+                ` }} /> */}
 
             <Header />
             <div className=""></div>

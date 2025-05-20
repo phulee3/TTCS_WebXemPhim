@@ -1,5 +1,9 @@
 import axiosClient from "./axiosClient";
 const moviesApi = {
+    getDanhSachBanner: () => {
+        const path = "/QuanLyPhim/LayDanhSachBanner";
+        return axiosClient.get(path);
+    },
     getDanhSachPhim: () => {
         const path = "/QuanLyPhim/LayDanhSachPhim?maNhom=GP09";
         return axiosClient.get(path);
@@ -32,5 +36,5 @@ const moviesApi = {
         return axiosClient.delete(path);
     },
 };
-
+console.log("moviesApi:", moviesApi);
 export default moviesApi;

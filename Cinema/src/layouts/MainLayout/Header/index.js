@@ -10,9 +10,9 @@ import "./style.css";
 
 const headMenu = [
     { nameLink: "Lịch chiếu", id: "lichchieu" },
-    { nameLink: "Cụm rạp", id: "cumrap" },
-    { nameLink: "Tin tức", id: "tintuc" },
-    { nameLink: "Ứng dụng", id: "ungdung" },
+    { nameLink: "Rạp chiếu", id: "rapchieu" },
+    { nameLink: "Phim chiếu", id: "phimchieu" },
+    { nameLink: "Review phim", id: "reviewphim" },
 ];
 
 export default function Header() {
@@ -106,9 +106,17 @@ export default function Header() {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container">
-                <a className="navbar-brand" href="/" onClick={handleClickLogo}>
+                <a
+                    className="navbar-brand"
+                    href="/"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        handleClickLogo();
+                    }}
+                >
+
                     <img
-                        src="https://t3.ftcdn.net/jpg/04/66/39/50/360_F_466395040_mj2YjwJe0qLlRXQk51kg0q8Jw9AwJp5r.jpg"
+                        src="https://i.vietgiaitri.com/2019/4/22/doanh-nhan-phu-le-su-that-sau-khi-chuon-chuon-thoat-xac-nghi-van-6546bc.jpg"
                         alt="logo"
                         style={{ height: 50 }}
                     />
@@ -126,16 +134,13 @@ export default function Header() {
                             <li key={link.id} className="nav-item">
                                 <a
                                     className="nav-link"
-                                    href={`#${link.id}`}
-                                    onClick={() => {
-                                        handleClickLink(link.id);
-                                        closeMenu();
-                                    }}
+                                    onClick={() => handleClickLink(link.id)}
                                 >
                                     {link.nameLink}
                                 </a>
                             </li>
                         ))}
+
                         <li className="nav-item">
                             {currentUser ? (
 

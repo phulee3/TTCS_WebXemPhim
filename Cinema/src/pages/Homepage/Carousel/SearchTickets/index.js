@@ -250,7 +250,7 @@ export default function SearchStickets() {
     }
 
     return (
-        <div className="form-search responsive" style={{ marginTop: "200px" }}>
+        <div className="form-search responsive" style={{ marginTop: "0px" }}>
             <div className="input-group mb-3" id="searchTickets">
                 <FormControl focused={false} className={classes.itemFirst}>
                     <Autocomplete

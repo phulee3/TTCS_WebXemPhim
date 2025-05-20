@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {URL_BANNER} from "../../../constants/config";
+import { URL_BANNER } from "../../../constants/config";
 import Slider from "react-slick";
 import ArrowBackIosRoundedIcon from "@material-ui/icons/ArrowBackIosRounded";
 import ArrowForwardIosRoundedIcon from "@material-ui/icons/ArrowForwardIosRounded";
@@ -13,17 +13,28 @@ import useStyles from "./styles";
 import BtnPlay from "../../../components/BtnPlay";
 import { LOADING_BACKTO_HOME_COMPLETED } from "../../../reducers/constants/Lazy";
 import "./carousel.css";
+import moviesApi from "../../../api/moviesApi";
 
 export default function Carousel() {
+
+
   const [listFilmBanner, setListFilmBanner] = useState([]);
   const getFilmBanner = async () => {
     try {
-      const res = await axios.get(URL_BANNER);
-      setListFilmBanner(res.data.content)
+      const res = await moviesApi.getDanhSachBanner();
+      setListFilmBanner(res.data.content);
     } catch (err) {
-      console.error(err);
+      console.error("Lỗi API:", err); // In chi tiết
+      if (err.response) {
+        console.error("Lỗi response:", err.response); // status, data, headers
+      } else if (err.request) {
+        console.error("Lỗi request:", err.request); // Không nhận được phản hồi
+      } else {
+        console.error("Lỗi khác:", err.message); // Lỗi setup
+      }
     }
   };
+
   const dispatch = useDispatch();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
@@ -43,8 +54,10 @@ export default function Carousel() {
 
   useEffect(() => {
     dispatch({ type: LOADING_BACKTO_HOME_COMPLETED });
+
     getFilmBanner();
   }, []);
+
 
   function NextArrow(props) {
     const { onClick } = props;
@@ -70,6 +83,7 @@ export default function Carousel() {
 
   return (
     <div id="carousel" className={classes.carousel}>
+      <SearchStickets />
       <Slider {...settings}>
         {listFilmBanner.map((banner) => {
           return (
@@ -83,7 +97,6 @@ export default function Carousel() {
           );
         })}
       </Slider>
-      <SearchStickets />
     </div>
   );
 }
