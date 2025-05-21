@@ -1,92 +1,107 @@
 import { makeStyles } from "@material-ui/core"
 import { customScrollbar } from '../../../../styles/materialUi';
+
 const useStyle = makeStyles({
   search: {
-    display: props => props.down992px ? "none" : 'flex',
-    maxWidth: "940px",
-    margin: "auto",
-    height: "83px",
-    position: "absolute",
-    bottom: "0",
+    display: 'flex',
+    maxWidth: "500px",
+    margin: "40px auto 0 auto",
+    height: "56px",
+    position: "relative",
     width: "100%",
-    left: "50%",
-    transform: "translate(-50%,50%)",
-    borderRadius: "5px",
-    boxShadow: '0 0 10px rgb(0 0 0 / 30%)',
-
+    borderRadius: "16px",
+    boxShadow: '0 2px 16px 0 rgba(0,0,0,0.08)',
     alignItems: "center",
+    backgroundColor: "#fff",
+    zIndex: 2,
   },
   itemFirst: {
-    padding: '1%',
-    flex: "30%",
-    '&:after': {
-      content: "''",
-      position: "absolute",
-      right: "0",
-      height: "62%",
-      top: "50%",
-      transform: "translateY(-50%)",
-    },
+    padding: 0,
+    flex: "100%",
+    backgroundColor: "#fff",
     '& > div': {
-      width: "auto !important",
+      width: "100% !important",
+      backgroundColor: "#fff",
+      borderRadius: "16px",
+      boxShadow: 'none',
     },
   },
-
   textField: {
-    '& > div': {
-      marginTop: 0,
-      paddingBottom: "0px !important",
-      '& > input': {
-        padding: "18px 0px !important",
-        paddingLeft: "20px !important",
-        fontSize: 14,
-      },
-      '&:before': {
-        borderBottom: "none !important"
-      },
-      '&:after': {
-        borderBottom: "none"
-      },
-      '& > div:hover:not(.Mui-disabled):before': {
-        borderBottom: 'none',
-      },
+    width: "100%",
+    backgroundColor: "#fff",
+    borderRadius: "16px",
+    '& .MuiInputBase-root': {
+      borderRadius: "16px",
+      fontSize: 18,
+      padding: "0 16px",
+      background: "#fff",
+      boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
+      border: '1.5px solid #e0e0e0',
+      transition: 'border-color 0.2s',
     },
-    '& > label': {
-      color: "#000",
-      fontSize: 14,
-      top: -3,
-      left: 20,
-      display: props => props.openPhim ? "none" : "block"
+    '& .MuiInputBase-root.Mui-focused': {
+      border: '1.5px solid #1976d2',
+      boxShadow: '0 2px 12px 0 rgba(25, 118, 210, 0.08)',
     },
-    '& > label.Mui-focused': {
-      display: "none"
+    '& .MuiInputBase-input': {
+      padding: "16px 0 16px 36px",
+      fontSize: 18,
+      color: '#222',
+    },
+    '& .MuiInputAdornment-root': {
+      marginLeft: 8,
+    },
+    '& .MuiInputLabel-root': {
+      left: 36,
+      fontSize: 16,
+      color: '#888',
+      top: 2,
+    },
+    '& .MuiInputLabel-shrink': {
+      top: 0,
+    },
+    '& .MuiInput-underline:before, & .MuiInput-underline:after': {
+      borderBottom: 'none',
     },
   },
   popupIndicator: {
     '& > span': {
       marginTop: 0,
       '& > svg': {
-        color: "rgba(0, 0, 0, 0.3)",
-        fontSize: "19px !important",
+        color: "#1976d2",
+        fontSize: "22px !important",
       },
     },
   },
   listbox: {
     ...customScrollbar,
+    backgroundColor: "#fff",
+    borderRadius: "16px",
+    boxShadow: '0 4px 24px 0 rgba(0,0,0,0.10)',
+    marginTop: 8,
+    padding: 0,
     '& .MuiAutocomplete-option[aria-selected="true"]': {
-      backgroundColor: "rgb(238, 130, 59)85",
-      color: "#fff",
-    }
+      backgroundColor: "rgba(25, 118, 210, 0.08)",
+      color: "#1976d2",
+    },
+    '& .MuiAutocomplete-option': {
+      borderRadius: 12,
+      margin: '4px 8px',
+      padding: '8px 12px',
+    },
   },
   paper: {
-    boxShadow: "0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%)",
+    backgroundColor: "#fff",
+    borderRadius: "16px",
+    boxShadow: "0px 5px 16px 0px rgba(0,0,0,0.10)",
   },
   noOptions: {
-    color: "#000",
-    fontSize: 14,
-    padding: "9.5px 20px 9.5px 20px",
+    color: "#888",
+    fontSize: 16,
+    padding: "16px 24px",
+    backgroundColor: "#fff",
+    borderRadius: "12px",
   },
-
   search__item: {
     color: 'black',
     padding: '1%',
@@ -125,29 +140,22 @@ const useStyle = makeStyles({
   'search__item--next': {
     flex: "calc(70% / 4)",
   },
-
-  // popup menu
   menu: { maxHeight: 300, ...customScrollbar },
   menu__item: {
     width: '100%',
     minHeight: "auto",
     display: 'block',
-    padding: '3px 20px',
-    fontSize: '14px',
-    color: '#333',
+    padding: '8px 20px',
+    fontSize: '16px',
+    color: '#222',
+    backgroundColor: "#fff",
+    borderRadius: 12,
     '&:focus': {
-      backgroundColor: 'transparent',
-    },
-    '& li ~ li': {
-      fontSize: 11,
-      color: '#aaa',
+      backgroundColor: 'rgba(25, 118, 210, 0.08)',
     },
     '&:hover': {
-      backgroundColor: "rgb(238, 130, 59)",
-      color: "#fff",
-      '& li ~ li': {
-        color: '#fff',
-      }
+      backgroundColor: "rgba(25, 118, 210, 0.08)",
+      color: "#1976d2",
     },
   },
   'menu__item--selected': {
@@ -157,7 +165,6 @@ const useStyle = makeStyles({
       color: '#fff',
     }
   },
-  // button
   btn: {
     backgroundColor: 'rgb(238, 130, 59)',
     margin: 'auto',
@@ -179,6 +186,6 @@ const useStyle = makeStyles({
     borderRadius: "4px",
     padding: "8px 23px",
   }
-
 })
+
 export default useStyle

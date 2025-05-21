@@ -17,6 +17,37 @@ import theatersApi from "../../../../api/theatersApi";
 import useStyles from "./styles";
 import formatDate from "../../../../utilities/formatDate";
 import { HIDDEN_SEARCHTICKET } from "../../../../constants/config";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles2 = makeStyles((theme) => ({
+    option: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(1),
+        '&:hover': {
+            backgroundColor: 'rgba(238, 130, 59, 0.1)',
+        },
+    },
+    movieImage: {
+        width: 50,
+        height: 70,
+        marginRight: theme.spacing(2),
+        objectFit: 'cover',
+        borderRadius: 4,
+    },
+    movieInfo: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    movieTitle: {
+        fontWeight: 'bold',
+        marginBottom: theme.spacing(0.5),
+    },
+    movieDetails: {
+        fontSize: '0.875rem',
+        color: theme.palette.text.secondary,
+    },
+}));
 
 export default function SearchStickets() {
     const { movieList: movieRender, errorMovieList } = useSelector(
@@ -49,6 +80,10 @@ export default function SearchStickets() {
         openPhim: data.openCtr.phim || data.setPhim?.maPhim,
     });
     const [currentPhimPopup, setcurrentPhimPopup] = useState(null);
+    const classes2 = useStyles2();
+    const [value, setValue] = useState(null);
+    const [inputValue, setInputValue] = useState('');
+
     useEffect(() => {
         let mounted = true;
         if (!data.openCtr.phim) {
@@ -245,6 +280,12 @@ export default function SearchStickets() {
         },
     };
 
+    const handleMovieSelect = (movie) => {
+        if (movie) {
+            history.push(`/movie/${movie.maPhim}`);
+        }
+    };
+
     if (errorMovieList) {
         return <p>{errorMovieList}</p>;
     }
@@ -254,33 +295,42 @@ export default function SearchStickets() {
             <div className="input-group mb-3" id="searchTickets">
                 <FormControl focused={false} className={classes.itemFirst}>
                     <Autocomplete
-                        options={movieRender}
-                        getOptionLabel={(option) => option.tenPhim}
-                        style={{ width: 300 }}
-                        renderInput={(params) => {
-                            return (
-                                <TextField
-                                    {...params}
-                                    label="--Select a movie--"
-                                    variant="standard"
-                                    className={`${classes.textField}`}
-                                />
-                            );
+                        value={value}
+                        onChange={(event, newValue) => {
+                            setValue(newValue);
+                            handleMovieSelect(newValue);
                         }}
-                        renderOption={(phim) => (
-                            <CustomPopper
-                                key={phim.tenPhim}
-                                phim={phim}
-                                setNewPhim={setNewPhim}
-                                currentPhimPopup={currentPhimPopup}
-                                rootElementPopup={data.rootElementPopup}
+                        inputValue={inputValue}
+                        onInputChange={(event, newInputValue) => {
+                            setInputValue(newInputValue);
+                        }}
+                        options={movieRender}
+                        getOptionLabel={(option) => option.tenPhim || ''}
+                        style={{ width: 300 }}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Nhập tên phim"
+                                variant="standard"
+                                className={classes.textField}
                             />
                         )}
+                        renderOption={(option) => (
+                            <div className={classes2.option}>
+                                <img
+                                    src={option.hinhAnh}
+                                    alt={option.tenPhim}
+                                    className={classes2.movieImage}
+                                />
+                                <div className={classes2.movieInfo}>
+                                    <div className={classes2.movieTitle}>{option.tenPhim}</div>
+                                    <div className={classes2.movieDetails}>
+                                        {option.ngayKhoiChieu && `Khởi chiếu: ${formatDate(option.ngayKhoiChieu)}`}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                         popupIcon={<ExpandMoreIcon />}
-                        value={data.setPhim ? data.setPhim : null}
-                        onChange={(event, phim) => {
-                            handleSelectPhim(phim);
-                        }}
                         classes={{
                             popupIndicator: classes.popupIndicator,
                             option: classes.menu__item,
@@ -288,160 +338,19 @@ export default function SearchStickets() {
                             paper: classes.paper,
                             noOptions: classes.noOptions,
                         }}
-                        open={data.openCtr.phim} // control open
-                        onClose={handleClosePhim}
-                        onOpen={handleOpenPhim}
-                        blurOnSelect
-                        noOptionsText="Không tìm thấy"
                     />
                 </FormControl>
 
-                <FormControl
-                    className={`${classes["search__item--next"]} ${classes.search__item}`}
-                    focused={false}
-                >
-                    <Select
-                        open={data.openCtr.rap}
-                        onClose={handleCloseRap}
-                        onOpen={handleOpenRap}
-                        onChange={handleSelectRap}
-                        value={data.setRap} // tenCumRap
-                        renderValue={(value) => `${value ? value : "--select a theater--"}`} // hiển thị giá trị đã chọn
-                        displayEmpty
-                        IconComponent={ExpandMoreIcon}
-                        MenuProps={menuProps}
-                    >
-                        <MenuItem
-                            value=""
-                            style={{ display: data.rapRender.length > 0 ? "none" : "block" }}
-                            classes={{ root: classes.menu__item }}
-                        >
-                            {data.setPhim
-                                ? `${data.startRequest
-                                    ? data.errorCallApi
-                                        ? data.errorCallApi
-                                        : "Đang tìm rạp"
-                                    : "Chưa có lịch chiếu, vui lòng chọn phim khác"
-                                }`
-                                : "Vui lòng chọn phim"}
-                        </MenuItem>
-                        {data.rapRender.map((item) => (
-                            <MenuItem
-                                value={item}
-                                key={item}
-                                classes={{
-                                    root: classes.menu__item,
-                                    selected: classes["menu__item--selected"],
-                                }}
-                            >
-                                {item}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
 
-                <FormControl
-                    className={`${classes["search__item--next"]} ${classes.search__item}`}
-                    focused={false}
-                >
-                    <Select
-                        open={data.openCtr.ngayXem}
-                        onClose={handleCloseNgayXem}
-                        onOpen={handleOpenNgayXem}
-                        onChange={handleSelectNgayXem}
-                        value={data.setNgayXem} // ngayChieu
-                        renderValue={(value) => `${value ? value : "--Select a date--"}`}
-                        displayEmpty
-                        IconComponent={ExpandMoreIcon}
-                        MenuProps={menuProps}
-                    >
-                        <MenuItem
-                            value=""
-                            style={{
-                                display: data.ngayChieuRender.length > 0 ? "none" : "block",
-                            }}
-                            classes={{ root: classes.menu__item }}
-                        >
-                            Vui lòng chọn phim và rạp
-                        </MenuItem>
-                        {data.ngayChieuRender.map((ngayChieu) => (
-                            <MenuItem
-                                value={ngayChieu}
-                                key={ngayChieu}
-                                classes={{
-                                    root: classes.menu__item,
-                                    selected: classes["menu__item--selected"],
-                                }}
-                            >
-                                <div>{formatDate(ngayChieu).dayToday}</div>
-                                <div>{formatDate(ngayChieu).dateShort}</div>
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
 
-                <FormControl
-                    className={`${classes["search__item--next"]} ${classes.search__item}`}
-                    focused={false}
-                >
-                    <Select
-                        open={data.openCtr.suatChieu}
-                        onClose={handleCloseSuatChieu}
-                        onOpen={handleOpenSuatChieu}
-                        onChange={handleSelectSuatChieu}
-                        value={data.setSuatChieu} // suatChieu
-                        renderValue={(value) => `${value ? value : "--Select a showtime--"}`}
-                        displayEmpty
-                        IconComponent={ExpandMoreIcon}
-                        MenuProps={menuProps}
-                    >
-                        <MenuItem
-                            value=""
-                            style={{
-                                display: data.suatChieuRender.length > 0 ? "none" : "block",
-                            }}
-                            classes={{ root: classes.menu__item }}
-                        >
-                            Vui lòng chọn phim, rạp và ngày xem
-                        </MenuItem>
-                        {data.suatChieuRender.map((suatChieu) => (
-                            <MenuItem
-                                value={suatChieu}
-                                key={suatChieu}
-                                classes={{
-                                    root: classes.menu__item,
-                                    selected: classes["menu__item--selected"],
-                                }}
-                            >
-                                {suatChieu}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
 
-                <FormControl className={classes["search__item--next"]}>
-                    <Button
-                        disabled={!data.maLichChieu} // khi không có dữ liệu > disabled cần set true
-                        classes={{
-                            root: classes.btn,
-                            disabled: classes.btnDisabled,
-                        }}
 
-                        onClick={() =>
-                            history.push(
-                                `/datve/${data.maLichChieu}`,
-                                `/datve/${data.maLichChieu}`
-                            )
-                        }
-                    >
-                        <div style={{ textAlign: 'center' }}>BookTicket NOW</div>
-                    </Button>
-                </FormControl>
+
             </div>
         </div>
     );
 }
-
 SearchStickets.propTypes = {
     smDown: PropTypes.bool,
 };
+

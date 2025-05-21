@@ -25,14 +25,14 @@ export function PrevArrow(props) {
 export default function Desktop({ arrayData, value }) {
   const classes = useStyles();
   const settings = {
-    className: "center",
-    centerPadding: "60px",
-    slidesToShow: 1,
-    speed: 500,
-    rows: 2,
-    slidesPerRow: 4,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />
+    // className: "center",
+    // centerPadding: "60px",
+    // slidesToShow: 1,
+    // speed: 500,
+    // rows: 2,
+    // slidesPerRow: 4,
+    // nextArrow: <NextArrow />,
+    // prevArrow: <PrevArrow />
   };
   return (
     <div className={classes.container}>

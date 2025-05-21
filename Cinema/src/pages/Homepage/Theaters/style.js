@@ -8,6 +8,8 @@ const useStyles = makeStyles({
     margin: "auto",
     border: "1px solid #ebebec",
     borderRadius: 4,
+    background: "#fff",
+    boxShadow: '0 2px 16px 0 rgba(0,0,0,0.06)',
   },
   taps: {
     // dường line phần chia khi horizontal

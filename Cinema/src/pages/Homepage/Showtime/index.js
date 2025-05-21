@@ -75,11 +75,11 @@ export default function SimpleTabs() {
       id="lichchieu"
     >
       <div className="tab-bar">
-      <AppBar className={classes.appBar} position="static">
-        <Tabs classes={{ root: classes.tabBar, indicator: classes.indicator }} value={value.value} onChange={handleChange}>
-          <Tab disableRipple className={`${classes.tabButton} ${classes.tabDangChieu}`} label="showing MOVIES" />
-        </Tabs>
-      </AppBar>
+        <AppBar className={classes.appBar} position="static">
+          <Tabs classes={{ root: classes.tabBar, indicator: classes.indicator }} value={value.value} onChange={handleChange}>
+            <Tab disableRipple className={`${classes.tabButton} ${classes.tabDangChieu}`} label="Mô VI E" />
+          </Tabs>
+        </AppBar>
       </div>
       <div className={classes.listMovie}>
         <Desktop arrayData={arrayData} value={value} />

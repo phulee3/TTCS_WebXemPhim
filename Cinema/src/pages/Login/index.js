@@ -44,7 +44,7 @@ export default function Login() {
 
     const handleSubmit = (user) => {
         dispatch(login(user));
-        // history.push("/", location.state);
+        history.push("/", location.state);
     };
     const handlesignUp = () => {
         history.push("/signUp", location.state);

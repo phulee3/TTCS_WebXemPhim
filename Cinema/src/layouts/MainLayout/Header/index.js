@@ -22,8 +22,8 @@ export default function Header() {
     let location = useLocation();
     const history = useHistory();
     const [openDrawer, setOpenDrawer] = useState(false);
+    const [openAccountMenu, setOpenAccountMenu] = useState(false);
 
-    // nếu đang mở drawer mà chuyển sang màn hình lớn thì phải tự đóng lại
     useEffect(() => {
         if (window.innerWidth >= 768 && openDrawer) {
             setOpenDrawer(false);
@@ -31,7 +31,6 @@ export default function Header() {
     }, [openDrawer]);
 
     useEffect(() => {
-        // clicklink > push to home > scrollTo after loading
         if (!isLoadingBackToHome) {
             setTimeout(() => {
                 scroller.scrollTo(location.state, {
@@ -44,15 +43,18 @@ export default function Header() {
 
     const handleLogout = () => {
         setOpenDrawer(false);
+        setOpenAccountMenu(false);
         dispatch({ type: LOGOUT });
     };
 
     const handleLogin = () => {
-        history.push("/login", location.pathname); // truyền kèm location.pathname để đăng nhập xong quay lại
+        history.push("/login", location.pathname);
+        setOpenAccountMenu(false);
     };
 
     const handleRegister = () => {
         history.push("/signUp", location.pathname);
+        setOpenAccountMenu(false);
     };
 
     const handleClickLogo = () => {
@@ -85,95 +87,88 @@ export default function Header() {
     const handleUser = () => {
         history.push("/taikhoan");
         setOpenDrawer(false);
-    };
-
-    const handleDrawerOpen = () => {
-        setOpenDrawer(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpenDrawer(false);
+        setOpenAccountMenu(false);
     };
 
     const toggleMenu = () => {
         setOpenDrawer(!openDrawer);
     };
 
-    const closeMenu = () => {
-        setOpenDrawer(false);
+    const toggleAccountMenu = () => {
+        setOpenAccountMenu(!openAccountMenu);
     };
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav className="header">
             <div className="container">
                 <a
-                    className="navbar-brand"
+                    className="logo"
                     href="/"
                     onClick={(e) => {
                         e.preventDefault();
                         handleClickLogo();
                     }}
                 >
-
                     <img
                         src="https://i.vietgiaitri.com/2019/4/22/doanh-nhan-phu-le-su-that-sau-khi-chuon-chuon-thoat-xac-nghi-van-6546bc.jpg"
                         alt="logo"
-                        style={{ height: 50 }}
+                        className="logo-img"
                     />
                 </a>
-                <button
-                    className="navbar-toggler"
-                    type="button"
-                    onClick={toggleMenu}
-                >
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className={`collapse navbar-collapse ${openDrawer ? 'show' : ''}`}>
-                    <ul className="navbar-nav ml-auto">
-                        {headMenu.map((link) => (
-                            <li key={link.id} className="nav-item">
-                                <a
-                                    className="nav-link"
-                                    onClick={() => handleClickLink(link.id)}
-                                >
-                                    {link.nameLink}
-                                </a>
-                            </li>
-                        ))}
-
-                        <li className="nav-item">
-                            {currentUser ? (
-
-                                <ul className="list-inline">
-                                    <li className="list-inline-item">
-                                        <button className="btn btn-primary" onClick={handleUser}>
-                                            <i className="fa fa-user"></i> Profiles - {currentUser.hoTen}
-                                        </button>
-                                    </li>
-                                    <li className="list-inline-item">
-                                        <button className="btn btn-danger" onClick={handleLogout}>
+                <div className={`menu ${openDrawer ? 'show' : ''}`}>
+                    {headMenu.map((link) => (
+                        <div
+                            key={link.id}
+                            className="menu-item"
+                            onClick={() => handleClickLink(link.id)}
+                        >
+                            {link.nameLink}
+                        </div>
+                    ))}
+                    <div className="account-menu">
+                        <button
+                            className="account-toggle"
+                            type="button"
+                            onClick={toggleAccountMenu}
+                        >
+                            <span className="account-toggle-icon">Tài khoản</span>
+                        </button>
+                        {openAccountMenu && (
+                            <div className="account-dropdown">
+                                {currentUser ? (
+                                    <>
+                                        <div
+                                            className="account-item btn-profile"
+                                            onClick={handleUser}
+                                        >
+                                            <i className="fa fa-user"></i> {currentUser.hoTen}
+                                        </div>
+                                        <div
+                                            className="account-item btn-logout"
+                                            onClick={handleLogout}
+                                        >
                                             Đăng xuất
-                                        </button>
-                                    </li>
-                                </ul>
-                            ) : (
-                                <div>
-                                    <button
-                                        className="btn btn-primary mr-2"
-                                        onClick={handleLogin}
-                                    >
-                                        Đăng nhập
-                                    </button>
-                                    <button
-                                        className="btn btn-success"
-                                        onClick={handleRegister}
-                                    >
-                                        Đăng ký
-                                    </button>
-                                </div>
-                            )}
-                        </li>
-                    </ul>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div
+                                            className="account-item btn-login"
+                                            onClick={handleLogin}
+                                        >
+                                            Đăng nhập
+                                        </div>
+                                        <div
+                                            className="account-item btn-register"
+                                            onClick={handleLogin}
+                                        >
+                                            Đăng ký
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </nav>
