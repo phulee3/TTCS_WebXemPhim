@@ -1,69 +1,121 @@
-import { makeStyles } from "@material-ui/core"
+import { makeStyles } from "@material-ui/core";
 import { customScrollbar, underLine } from '../../../../styles/materialUi';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
+    background: "transparent", // hoặc "inherit"
     display: 'flex',
-    borderRadius: "10px",
-    margin: '30px 100px',
-    color: "#000",
+    borderRadius: 18,
+    margin: '32px 0',
+    boxShadow: "none", // hoặc xóa nếu muốn
+    color: "#222",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      margin: "16px 0",
+      borderRadius: 12,
+    },
   },
   leftSection: {
     width: "28%",
-  },
-  indicator: {
-    backgroundColor: "transparent",
-  },
-
-  wrapper: {
-    justifyContent: "flex-start",
-    flexDirection: "row",
-  },
-  tabRoot: {
-    padding: 20,
-    textAlign: "left",
-    fontSize: 12,
-    opacity: .3,
-    "&:hover": {
-      opacity: 1,
+    padding: "32px 16px",
+    borderRight: "2px solid #ffeaea",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    background: "#fff",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      borderRight: "none",
+      borderBottom: "2px solid #ffeaea",
+      padding: "16px 8px",
     },
-    transition: "all .2s",
-    ...underLine
   },
   logo: {
-    width: 50,
-    marginRight: 10,
+    width: 60,
+    height: 60,
+    objectFit: "contain",
+    borderRadius: 12,
+    marginBottom: 18,
+    boxShadow: "0 2px 8px 0 rgba(255,23,68,0.10)",
+    background: "#f9f9fb",
   },
-
+  tabRoot: {
+    padding: "18px 0",
+    textAlign: "left",
+    fontSize: 15,
+    opacity: 0.6,
+    color: "#222",
+    fontWeight: 600,
+    borderRadius: 10,
+    marginBottom: 8,
+    cursor: "pointer",
+    background: "transparent",
+    transition: "all .2s",
+    "&:hover": {
+      opacity: 1,
+      background: "#fff0f3",
+      color: "#ff1744",
+    },
+    ...underLine,
+  },
+  tabActive: {
+    opacity: 1,
+    background: "#fff0f3",
+    color: "#ff1744",
+    boxShadow: "0 2px 12px 0 rgba(255,23,68,0.10)",
+  },
   rightSection: {
     width: "72%",
+    padding: "32px 24px",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      padding: "16px 4px",
+    },
   },
-
   listDay: {
-    height: "90px",
-    padding: "16px !important",
-    paddingLeft: "0 !important",
-    paddingRight: "0 !important",
-    backgroundColor: "#fff",
-    borderRadius: 10,
-
+    height: "auto",
+    minHeight: 64,
+    padding: "12px 0 12px 0",
+    background: "#fff",
+    borderRadius: 12,
     display: "flex",
-
-    overflowX: "scroll",
+    gap: 12,
+    overflowX: "auto",
     overflowY: "hidden",
     whiteSpace: "nowrap",
+    marginBottom: 18,
     ...customScrollbar,
   },
   dayItem: {
     display: 'flex',
-    alignItem: 'center',
-    padding: 10,
-    fontWeight: 500,
-    textAlign: "center",
+    alignItems: 'center',
+    justifyContent: "center",
+    minWidth: 90,
+    padding: "10px 18px",
+    fontWeight: 600,
+    fontSize: 15,
+    color: "#222",
+    background: "#f9f9fb",
+    borderRadius: 8,
+    border: "1.5px solid #ff8a65",
     cursor: "pointer",
+    marginRight: 8,
+    transition: "background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s",
+    boxShadow: "0 2px 8px 0 rgba(255,23,68,0.06)",
+    "&:hover": {
+      background: "#fff0f3",
+      color: "#ff1744",
+      borderColor: "#ff1744",
+      boxShadow: "0 4px 16px 0 rgba(255,23,68,0.12)",
+    },
   },
-
+  dayItemActive: {
+    background: "#fff0f3",
+    color: "#ff1744",
+    borderColor: "#ff1744",
+    boxShadow: "0 4px 16px 0 rgba(255,23,68,0.15)",
+  },
 }));
-export default useStyles
+
+export default useStyles;

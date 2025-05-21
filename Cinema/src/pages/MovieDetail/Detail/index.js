@@ -43,78 +43,118 @@ export default function Desktop({ movieDetailShowtimes: data, isMobile }) {
   };
 
   return (
-<div className="container" style={{ marginTop: "100px" }}>
-  <div className="row">
-    <div className="col-lg-6">
-      <div
-        className="items"
-        style={{ height: "300px", width: "500px", margin: "50px 50px 50px 50px" }}
-      >
-        <img
-          src={data.hinhAnh}
-          alt="poster"
-          className="img-fluid"
-          onError={(e) => {
-            e.target.onerror = null;
-            setImagePage404(true);
-          }}
-        />
-        {imagePage404 && <div className={classes.withOutImage}></div>}
-      </div>
-    </div>
-    <div className="col-lg-6 content">
-      <div className="">
-        <div className="row">
-          <p className="col-lg-3">Ngày công chiếu</p>
-          <p className="col-lg-9">
-            {formatDate(data.ngayKhoiChieu?.slice(0, 10)).YyMmDd}
-          </p>
-        </div>
-        <div className="row">
-          <p className="col-lg-3">Đạo diễn</p>
-          <p className="col-lg-9"> {data?.daoDien} </p>
-        </div>
-        <div className="row">
-          <p className="col-lg-3">Diễn viên</p>
-          <p className="col-lg-9">{data?.dienVien}</p>
-        </div>
-        <div className="row">
-          <p className="col-lg-3">Thể Loại</p>
-          <p className="col-lg-9">{data?.maTheLoaiPhim}</p>
-        </div>
-        <div className="row">
-          <p className="col-lg-3">Định dạng</p>
-          <p className="col-lg-9">{data?.dinhDang}</p>
-        </div>
-        <div className="row">
-          <p className="col-lg-3">Quốc Gia SX</p>
-          <p className="col-lg-9">{data?.nhaSanXuat}</p>
-        </div>
-        <div className="row">
-          <div className="col-lg-3">
-            <p className="">Nội dung</p>
-          </div>
-          <div className="col-lg-9">
-            <p>{data.moTa}</p>
+    <div
+      // XÓA className="container"
+      style={{
+        marginTop: "63px",
+        background: "#fff0f3",
+        borderRadius: "0px",
+        padding: "50px 0",         // padding trái phải = 0 để full sát mép
+        width: "100vw",            // hoặc "100%"
+        minHeight: "100vh",        // tuỳ ý, cho đẹp
+        position: "relative",      // tránh scroll ngang do 100vw
+        left: "50%",
+        right: "50%",
+        marginLeft: "-50vw",
+        marginRight: "-50vw",
+      }}
+    >
+      <div className="row" style={{ maxWidth: 1200, margin: "auto" }}>
+        <div className="col-lg-6">
+          <div
+            className="items"
+            style={{
+              height: "400px",
+              width: "100%",
+              maxWidth: "600px",
+              margin: "40px auto",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <img
+              src={data.hinhAnh}
+              alt="poster"
+              className="img-fluid"
+              style={{
+                height: "100%",
+                width: "auto",
+                maxWidth: "100%",
+                borderRadius: "18px",
+                boxShadow: "0 4px 24px 0 rgba(255,23,68,0.12)",
+              }}
+              onError={(e) => {
+                e.target.onerror = null;
+                setImagePage404(true);
+              }}
+            />
+            {imagePage404 && <div className={classes.withOutImage}></div>}
           </div>
         </div>
-        <div className={classes.shortInfo}>
-          <button className={classes.btnMuaVe} onClick={handleBtnMuaVe}>
-            {location.state?.comingMovie ? "Thông tin phim" : "Mua vé"}
-          </button>
-          <button className={classes.btnMuaVe} onClick={() => openModal()}>
-            {location.state?.comingMovie ? "Thông tin phim" : "Xem demo"}
-          </button>
+        <div className="col-lg-6 content" style={{ color: "#111" }}>
+          <div>
+            <div className="row">
+              <p className="col-lg-3">Ngày công chiếu</p>
+              <p className="col-lg-9" style={{ color: "#111" }}>
+                {formatDate(data.ngayKhoiChieu?.slice(0, 10)).YyMmDd}
+              </p>
+            </div>
+            <div className="row">
+              <p className="col-lg-3">Đạo diễn</p>
+              <p className="col-lg-9" style={{ color: "#111" }}>
+                {data?.daoDien}
+              </p>
+            </div>
+            <div className="row">
+              <p className="col-lg-3">Diễn viên</p>
+              <p className="col-lg-9" style={{ color: "#111" }}>
+                {data?.dienVien}
+              </p>
+            </div>
+            <div className="row">
+              <p className="col-lg-3">Thể Loại</p>
+              <p className="col-lg-9" style={{ color: "#111" }}>
+                {data?.maTheLoaiPhim}
+              </p>
+            </div>
+            <div className="row">
+              <p className="col-lg-3">Định dạng</p>
+              <p className="col-lg-9" style={{ color: "#111" }}>
+                {data?.dinhDang}
+              </p>
+            </div>
+            <div className="row">
+              <p className="col-lg-3">Quốc Gia SX</p>
+              <p className="col-lg-9" style={{ color: "#111" }}>
+                {data?.nhaSanXuat}
+              </p>
+            </div>
+            <div className="row">
+              <div className="col-lg-3">
+                <p>Nội dung</p>
+              </div>
+              <div className="col-lg-9">
+                <p style={{ color: "#111" }}>{data.moTa}</p>
+              </div>
+            </div>
+            <div className={classes.shortInfo}>
+              <button className={classes.btnMuaVe} onClick={handleBtnMuaVe}>
+                {location.state?.comingMovie ? "Thông tin phim" : "Mua vé"}
+              </button>
+              <button className={classes.btnMuaVe} onClick={() => openModal()}>
+                {location.state?.comingMovie ? "Thông tin phim" : "Xem demo"}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+      <Tap
+        data={data}
+        onClickBtnMuave={onClickBtnMuave}
+        onIncreaseQuantityComment={onIncreaseQuantityComment}
+        isMobile={isMobile}
+      />
     </div>
-  </div>
-  <Tap
-    data={data}
-    onClickBtnMuave={onClickBtnMuave}
-    onIncreaseQuantityComment={onIncreaseQuantityComment}
-    isMobile={isMobile}
-  />
-</div>
   );
 }

@@ -83,7 +83,7 @@ export default function Carousel() {
 
   return (
     <div id="carousel" className={classes.carousel}>
-      <SearchStickets />
+
       <Slider {...settings}>
         {listFilmBanner.map((banner) => {
           return (

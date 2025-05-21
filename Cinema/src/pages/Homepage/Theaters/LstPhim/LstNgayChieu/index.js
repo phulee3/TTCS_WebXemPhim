@@ -29,7 +29,10 @@ export default function LstGioChieu({ lstLichChieuTheoPhim }) {
           <div className={classes.groupTime}>
             {filterByDay(date).map(lichChieuTheoPhim => (
               <Fragment key={lichChieuTheoPhim.maLichChieu}>
-                <ButtonCheckout lichChieuTheoPhim={lichChieuTheoPhim} />
+                <ButtonCheckout
+                  lichChieuTheoPhim={lichChieuTheoPhim}
+                  className={classes.gioChieuItem}
+                />
               </Fragment>
             ))}
           </div>

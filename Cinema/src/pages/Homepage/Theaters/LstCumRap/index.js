@@ -18,7 +18,13 @@ function LstCumRap(props) {
       <div className={classes.lstCumRap}>
         {lstCumRap.map((cumRap, index) =>
         (
-          <div className={classes.cumRap} index={index} onClick={(e,) => handleChangeCumRap(e)} key={cumRap.maCumRap} style={{ opacity: valueCumRap === index ? '1' : '.5' }}>
+          <div
+            className={`${classes.cumRap} ${valueCumRap === index ? classes.cumRapActive : ""}`}
+            index={index}
+            onClick={handleChangeCumRap}
+            key={cumRap.maCumRap}
+            style={{ opacity: valueCumRap === index ? '1' : '.5' }}
+          >
             <TheaterImg nameTheater={cumRap.tenCumRap} imgStyle={classes.cumRap__img} />
             <div className={classes.cumRap__info}>
               <TenCumRap tenCumRap={cumRap.tenCumRap} />

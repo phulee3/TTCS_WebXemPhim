@@ -6,7 +6,7 @@ const Logo = (props) => {
   return (
     <img
       alt="Logo"
-      src="/img/admin/logo.svg"
+      src="https://i.vietgiaitri.com/2019/4/22/doanh-nhan-phu-le-su-that-sau-khi-chuon-chuon-thoat-xac-nghi-van-6546bc.jpg"
       {...props}
     />
   );

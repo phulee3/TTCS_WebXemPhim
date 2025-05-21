@@ -27,8 +27,8 @@ export default function Homepage() {
   return (
     <div>
       <Carousel />
-      <Showtime />
-      <Theaters />
+      {/* <Showtime />
+      <Theaters /> */}
     </div>
   );
 }

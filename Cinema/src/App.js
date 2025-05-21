@@ -28,6 +28,9 @@ import Register from "./pages/Register";
 import Page404 from "./pages/Page404";
 import EditShowTime from "./pages/CreateShowtime/EditShowTime";
 import Invoice from "./pages/TicketManagement/invoice";
+import TheaterPage from "./pages/TheaterPage";
+import MovieShowings from "./pages/MovieShowings";
+
 function App() {
     return (
         <BrowserRouter>
@@ -119,6 +122,18 @@ function App() {
                         <MainLayout>
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/signUp" component={Register} />
+                        </MainLayout>
+                    </Route>
+
+                    <Route exact path={"/theaters"}>
+                        <MainLayout>
+                            <Route exact path="/theaters" component={TheaterPage} />
+                        </MainLayout>
+                    </Route>
+
+                    <Route exact path={"/phim-dang-chieu"}>
+                        <MainLayout>
+                            <Route exact path="/phim-dang-chieu" component={MovieShowings} />
                         </MainLayout>
                     </Route>
 

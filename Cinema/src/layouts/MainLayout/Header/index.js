@@ -9,10 +9,11 @@ import { getTheaters } from "../../../reducers/actions/Theater";
 import "./style.css";
 
 const headMenu = [
-    { nameLink: "Lịch chiếu", id: "lichchieu" },
-    { nameLink: "Rạp chiếu", id: "rapchieu" },
-    { nameLink: "Phim chiếu", id: "phimchieu" },
+    { nameLink: "Trang chủ", id: "trangchu" },
+    { nameLink: "Rạp chiếu", path: "/theaters" },
+    { nameLink: "Phim chiếu", path: "/phim-dang-chieu" },
     { nameLink: "Review phim", id: "reviewphim" },
+
 ];
 
 export default function Header() {
@@ -69,8 +70,12 @@ export default function Header() {
         }, 50);
     };
 
-    const handleClickLink = (id) => {
+    const handleClickLink = (id, path) => {
         setOpenDrawer(false);
+        if (path) {
+            history.push(path);
+            return;
+        }
         if (location.pathname === "/") {
             scroller.scrollTo(id, {
                 duration: 800,
@@ -118,9 +123,9 @@ export default function Header() {
                 <div className={`menu ${openDrawer ? 'show' : ''}`}>
                     {headMenu.map((link) => (
                         <div
-                            key={link.id}
+                            key={link.id || link.path}
                             className="menu-item"
-                            onClick={() => handleClickLink(link.id)}
+                            onClick={() => handleClickLink(link.id, link.path)}
                         >
                             {link.nameLink}
                         </div>

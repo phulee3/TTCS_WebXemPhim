@@ -66,7 +66,7 @@ export default function HeThongRap() {
                 lstCumRap={theater.lstCumRap}
                 color={
                   colorTheater[
-                    (theater.lstCumRap && theater.lstCumRap.length > 0 ? theater.lstCumRap[0].tenCumRap.slice(0, 3).toUpperCase() : "")
+                  (theater.lstCumRap && theater.lstCumRap.length > 0 ? theater.lstCumRap[0].tenCumRap.slice(0, 3).toUpperCase() : "")
                   ]
                 }
                 maHeThongRap={theater.maHeThongRap}

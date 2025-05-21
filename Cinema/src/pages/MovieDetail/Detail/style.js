@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     bottom: 0,
     right: 0,
-    
+
   },
   gradient: {
     position: "absolute",
@@ -44,8 +44,15 @@ const useStyles = makeStyles(theme => ({
 
   },
   shortInfo: {
-    width: "59%",
-    padding: "0px 15px"
+    display: "flex",
+    gap: 18,
+    marginTop: 24,
+    marginBottom: 8,
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      gap: 10,
+      marginTop: 16,
+    },
   },
   movieName: {
     fontSize: 24,
@@ -63,21 +70,28 @@ const useStyles = makeStyles(theme => ({
     minWidth: "33px"
   },
   btnMuaVe: {
-    fontSize: "16px",
-    borderRadius: "4px",
-    background: "0 0",
-    padding: "11px 25px",
-    transition: "all .2s",
+    background: "linear-gradient(90deg, #ff1744 0%, #ff8a65 100%)",
+    color: "#fff",
+    border: "none",
+    borderRadius: 10,
+    padding: "12px 32px",
+    fontWeight: 700,
+    fontSize: 17,
+    letterSpacing: 1,
+    cursor: "pointer",
+    boxShadow: "0 2px 12px 0 rgba(255,23,68,0.10)",
+    transition: "background 0.2s, box-shadow 0.2s, transform 0.15s",
     marginTop: "25px",
     marginBottom: "20px",
     margin: '0 10px',
-    backgroundColor: "rgb(238, 130, 59)",
-    border: "none",
-    color: "#fff",
-    fontWeight:'600',
     "&:hover": {
-      backgroundColor: "#b42a14",
-    }
+      background: "linear-gradient(90deg, #ff8a65 0%, #ff1744 100%)",
+      boxShadow: "0 4px 24px 0 rgba(255,23,68,0.18)",
+      transform: "translateY(-2px) scale(1.03)",
+    },
+    "&:active": {
+      background: "#ff1744",
+    },
   },
 
   rate: {
@@ -121,14 +135,17 @@ const useStyles = makeStyles(theme => ({
   },
 
   withOutImage: {
-    borderRadius: 4,
-    width: "100%", height: "100%",
-    animationName: `$myEffect`,
-    animationDuration: "3s",
-    animationTimingFunction: `${theme.transitions.easing.easeInOut}`,
-    animationIterationCount: "infinite",
-    background: "linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)",
-    backgroundSize: "400% 400%",
+    width: 200,
+    height: 300,
+    background: "#eee",
+    borderRadius: 16,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "#bbb",
+    fontSize: 22,
+    fontWeight: 600,
+    margin: "0 auto",
   },
   "@keyframes myEffect": {
     "0%": { backgroundPosition: "0% 50%" },

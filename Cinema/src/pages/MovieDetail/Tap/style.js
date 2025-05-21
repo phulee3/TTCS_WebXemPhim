@@ -5,7 +5,16 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
     margin: "auto",
-  
+    background: "#fff",
+    borderRadius: 18,
+    boxShadow: "0 2px 16px 0 rgba(255,23,68,0.08)",
+    padding: "24px 16px",
+    marginTop: 32,
+    marginBottom: 32,
+    [theme.breakpoints.down("sm")]: {
+      padding: "12px 4px",
+      marginTop: 16,
+    },
   },
   appBarRoot: {
     backgroundColor: "transparent",
@@ -141,7 +150,7 @@ const useStyles = makeStyles(theme => ({
       borderColor: 'rgb(238, 130, 59)',
     },
   },
- 
+
   textField: {
     '& .MuiInputLabel-root': {
       transform: "translate(18px, 29px) scale(1)",
@@ -222,6 +231,61 @@ const useStyles = makeStyles(theme => ({
         borderColor: "#949494",
         backgroundColor: "transparent",
       }
+    },
+  },
+  tabList: {
+    display: "flex",
+    gap: 12,
+    marginBottom: 18,
+    overflowX: "auto",
+    paddingBottom: 8,
+  },
+  tabItem: {
+    background: "#fff",
+    color: "#222",
+    borderRadius: 10,
+    border: "2px solid #ff8a65",
+    padding: "10px 24px",
+    fontWeight: 700,
+    fontSize: 16,
+    cursor: "pointer",
+    transition: "background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s",
+    boxShadow: "0 2px 8px 0 rgba(255,23,68,0.06)",
+    "&:hover": {
+      background: "#fff0f3",
+      color: "#ff1744",
+      borderColor: "#ff1744",
+      boxShadow: "0 4px 16px 0 rgba(255,23,68,0.12)",
+    },
+  },
+  tabItemActive: {
+    background: "#fff0f3",
+    color: "#ff1744",
+    borderColor: "#ff1744",
+    boxShadow: "0 4px 16px 0 rgba(255,23,68,0.15)",
+  },
+  showtimeList: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 12,
+    marginTop: 10,
+  },
+  showtimeItem: {
+    background: "#fff",
+    color: "#222",
+    borderRadius: 8,
+    border: "1.5px solid #ff8a65",
+    padding: "8px 18px",
+    fontWeight: 600,
+    fontSize: 15,
+    cursor: "pointer",
+    transition: "background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s",
+    boxShadow: "0 2px 8px 0 rgba(255,23,68,0.08)",
+    "&:hover": {
+      background: "#fff0f3",
+      color: "#ff1744",
+      borderColor: "#ff1744",
+      boxShadow: "0 4px 16px 0 rgba(255,23,68,0.15)",
     },
   },
 }))
